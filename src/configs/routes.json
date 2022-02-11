@@ -1,10 +1,15 @@
 [
   {
+    "index": true,
     "path": "/",
-    "name": "Home"
+    "title": "Dashboard",
+    "icon": "HomeFilled",
+    "component": "Home"
   },
   {
     "path": "/timesheet",
-    "name": "Timesheet"
+    "title": "Timesheet",
+    "icon": "CalendarFilled",
+    "component": "Timesheet"
   }
 ]

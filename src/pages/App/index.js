@@ -1,36 +1,37 @@
-import { useState, createElement } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { useState, createElement, Suspense, lazy } from "react";
+import { Navigate, Route, Routes, Link, useLocation } from "react-router-dom";
 import { Layout, Menu } from "antd";
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  CalendarFilled,
-  HomeFilled,
-} from "@ant-design/icons";
+
+import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import "./style.css";
 
-import Home from "@/pages/Home";
-import Timesheet from "@/pages/Timesheet";
+import RoutesConfig from "@/configs/routes";
+import Icon from "@/helpers/Icon";
+import LoadingScreen from "@/components/LoadingScreen";
 
 const { Header, Sider, Content } = Layout;
 
 const isLogin = true;
 
-function App({ children }) {
+const App = () => {
   const [collapsed, setCollapsed] = useState(false);
   const toggle = () => setCollapsed(!collapsed);
+  const location = useLocation();
 
   return isLogin ? (
     <Layout className="container">
       <Sider trigger={null} collapsible collapsed={collapsed} width="250">
         <div className="logo">{!collapsed ? `GUDANG SOLUSI GROUP` : `GSG`}</div>
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={["1"]}>
-          <Menu.Item key="1" icon={<HomeFilled />}>
-            Dashboard
-          </Menu.Item>
-          <Menu.Item key="2" icon={<CalendarFilled />}>
-            Timesheet
-          </Menu.Item>
+        <Menu
+          theme="dark"
+          mode="inline"
+          defaultSelectedKeys={[location?.pathname]}
+        >
+          {RoutesConfig.map((route) => (
+            <Menu.Item key={route?.path} icon={<Icon type={route?.icon} />}>
+              <Link to={route?.path}>{route?.title}</Link>
+            </Menu.Item>
+          ))}
         </Menu>
       </Sider>
       <Layout className="site-layout">
@@ -51,13 +52,31 @@ function App({ children }) {
             minHeight: 280,
           }}
         >
-          {children}
+          <Routes>
+            {RoutesConfig.map((route, index) => {
+              const Component = lazy(() =>
+                import(`@/pages/${route?.component}`)
+              );
+              return (
+                <Route
+                  key={index}
+                  path={route?.path}
+                  index={route?.index || false}
+                  element={
+                    <Suspense fallback={<LoadingScreen />}>
+                      <Component />
+                    </Suspense>
+                  }
+                />
+              );
+            })}
+          </Routes>
         </Content>
       </Layout>
     </Layout>
   ) : (
     <Navigate to="/login" />
   );
-}
+};
 
 export default App;

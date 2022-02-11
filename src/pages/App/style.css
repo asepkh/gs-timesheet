@@ -28,7 +28,7 @@
   margin-bottom: 16px;
   color: white;
   font-size: 18px;
-  font-weight: bolder;
+  font-weight: 600;
   text-align: center;
 }
 
@@ -37,6 +37,6 @@
 }
 
 .container {
-  font-family: Poppins;
+  font-family: "Poppins", sans-serif;
   min-height: 100vh;
 }
