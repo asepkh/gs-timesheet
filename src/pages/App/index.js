@@ -11,7 +11,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 
 const { Header, Sider, Content } = Layout;
 
-const isLogin = true;
+const isLogin = false;
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -20,7 +20,14 @@ const App = () => {
 
   return isLogin ? (
     <Layout className="container">
-      <Sider trigger={null} collapsible collapsed={collapsed} width="250">
+      <Sider
+        breakpoint="md"
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+        width="250"
+        onBreakpoint={(broken) => setCollapsed(broken)}
+      >
         <div className="logo">{!collapsed ? `GUDANG SOLUSI GROUP` : `GSG`}</div>
         <Menu
           theme="dark"
