@@ -9,9 +9,11 @@ import RoutesConfig from "@/configs/routes";
 import Icon from "@/helpers/Icon";
 import LoadingScreen from "@/components/LoadingScreen";
 
-const { Header, Sider, Content } = Layout;
+const { Header, Sider, Content } = Layout,
+  { SubMenu } = Menu;
 
-const isLogin = false;
+const isLogin = true,
+  isAdmin = false;
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -34,11 +36,33 @@ const App = () => {
           mode="inline"
           defaultSelectedKeys={[location?.pathname]}
         >
-          {RoutesConfig.map((route) => (
-            <Menu.Item key={route?.path} icon={<Icon type={route?.icon} />}>
-              <Link to={route?.path}>{route?.title}</Link>
-            </Menu.Item>
-          ))}
+          {RoutesConfig.map((route) => {
+            if (route?.admin && !isAdmin) return <></>;
+            if (route?.submenu) {
+              return (
+                <SubMenu
+                  key={route?.title}
+                  icon={<Icon type={route?.icon} />}
+                  title={route?.title}
+                >
+                  {route?.submenu.map((submenu) => (
+                    <Menu.Item
+                      key={submenu?.path}
+                      icon={<Icon type={submenu?.icon} />}
+                    >
+                      <Link to={submenu?.path}>{submenu?.title}</Link>
+                    </Menu.Item>
+                  ))}
+                </SubMenu>
+              );
+            } else {
+              return (
+                <Menu.Item key={route?.path} icon={<Icon type={route?.icon} />}>
+                  <Link to={route?.path}>{route?.title}</Link>
+                </Menu.Item>
+              );
+            }
+          })}
         </Menu>
       </Sider>
       <Layout className="site-layout">
@@ -61,21 +85,57 @@ const App = () => {
         >
           <Routes>
             {RoutesConfig.map((route, index) => {
-              const Component = lazy(() =>
-                import(`@/pages/${route?.component}`)
-              );
-              return (
-                <Route
-                  key={index}
-                  path={route?.path}
-                  index={route?.index || false}
-                  element={
-                    <Suspense fallback={<LoadingScreen />}>
-                      <Component />
-                    </Suspense>
-                  }
-                />
-              );
+              if (!route?.submenu) {
+                const Component = lazy(() =>
+                  import(`@/pages/${route?.component}`)
+                );
+                return (
+                  <Route
+                    key={index}
+                    path={route?.path}
+                    index={route?.index || false}
+                    element={
+                      !route?.admin ? (
+                        <Suspense fallback={<LoadingScreen />}>
+                          <Component />
+                        </Suspense>
+                      ) : isAdmin ? (
+                        <Suspense fallback={<LoadingScreen />}>
+                          <Component />
+                        </Suspense>
+                      ) : (
+                        <Navigate to="/" />
+                      )
+                    }
+                  />
+                );
+              } else {
+                return route.submenu.map((submenu, index) => {
+                  const Component = lazy(() =>
+                    import(`@/pages/${submenu?.component}`)
+                  );
+                  return (
+                    <Route
+                      key={index}
+                      path={submenu?.path}
+                      index={submenu?.index || false}
+                      element={
+                        !route?.admin && !route?.submenu?.admin ? (
+                          <Suspense fallback={<LoadingScreen />}>
+                            <Component />
+                          </Suspense>
+                        ) : isAdmin ? (
+                          <Suspense fallback={<LoadingScreen />}>
+                            <Component />
+                          </Suspense>
+                        ) : (
+                          <Navigate to="/" />
+                        )
+                      }
+                    />
+                  );
+                });
+              }
             })}
           </Routes>
         </Content>

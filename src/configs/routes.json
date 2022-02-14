@@ -11,5 +11,30 @@
     "title": "Timesheet",
     "icon": "CalendarFilled",
     "component": "Timesheet"
+  },
+  {
+    "title": "Admin Menu",
+    "icon": "SettingFilled",
+    "admin": true,
+    "submenu": [
+      {
+        "path": "/admin/users",
+        "title": "Users",
+        "icon": "UsergroupAddOutlined",
+        "component": "Users"
+      },
+      {
+        "path": "/admin/projects",
+        "title": "Projects",
+        "icon": "AppstoreAddOutlined",
+        "component": "Projects"
+      },
+      {
+        "path": "/admin/reports",
+        "title": "Reports",
+        "icon": "SolutionOutlined",
+        "component": "Reports"
+      }
+    ]
   }
 ]
