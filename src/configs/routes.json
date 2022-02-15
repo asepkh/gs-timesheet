@@ -13,6 +13,12 @@
     "component": "Timesheet"
   },
   {
+    "path": "/biodata",
+    "title": "Biodata",
+    "icon": "UserOutlined",
+    "component": "Biodata"
+  },
+  {
     "title": "Admin Menu",
     "icon": "SettingFilled",
     "admin": true,
