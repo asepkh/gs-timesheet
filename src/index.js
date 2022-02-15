@@ -7,6 +7,11 @@ import reportWebVitals from "./reportWebVitals";
 import App from "@/pages/App";
 import Login from "@/pages/Login";
 
+import moment from "moment";
+import "moment/locale/id";
+
+moment.locale("id");
+
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>

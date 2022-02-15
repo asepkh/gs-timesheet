@@ -1,0 +1,22 @@
+#calendar {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#calendar td,
+#calendar th {
+  border: 1.5px solid #ddd;
+  padding: 8px;
+  font-weight: 600;
+}
+
+#calendar th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: center;
+}
+
+#calendar .days {
+  height: 80px;
+  text-align: center;
+}

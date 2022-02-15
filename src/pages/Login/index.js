@@ -1,14 +1,19 @@
-import React from "react";
-import { Form, Input, Button, Checkbox, Card } from 'antd';
+import { Form, Input, Button, Checkbox, Card } from "antd";
 
 const Login = () => {
   const onFinish = (values) => {
-    console.log('Success:', values);
+    console.log("Success:", values);
   };
 
   return (
-    <div style={{display: 'flex', justifyContent: 'center', paddingTop: '5rem'}}>
-      <Card title="Login TimeSheet Gudang Solusi" bordered={false} style={{ width: 500 }}>
+    <div
+      style={{ display: "flex", justifyContent: "center", paddingTop: "5rem" }}
+    >
+      <Card
+        title="Login TimeSheet Gudang Solusi"
+        bordered={false}
+        style={{ width: 500 }}
+      >
         <Form
           name="basic"
           initialValues={{ remember: true }}
@@ -18,7 +23,7 @@ const Login = () => {
           <Form.Item
             label="Username"
             name="username"
-            rules={[{ required: true, message: 'Please input your username!' }]}
+            rules={[{ required: true, message: "Please input your username!" }]}
           >
             <Input />
           </Form.Item>
@@ -26,7 +31,7 @@ const Login = () => {
           <Form.Item
             label="Password"
             name="password"
-            rules={[{ required: true, message: 'Please input your password!' }]}
+            rules={[{ required: true, message: "Please input your password!" }]}
           >
             <Input.Password />
           </Form.Item>

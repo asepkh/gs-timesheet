@@ -13,7 +13,7 @@ const { Header, Sider, Content } = Layout,
   { SubMenu } = Menu;
 
 const isLogin = true,
-  isAdmin = false;
+  isAdmin = true;
 
 const App = () => {
   const [collapsed, setCollapsed] = useState(false);
@@ -37,6 +37,7 @@ const App = () => {
           defaultSelectedKeys={[location?.pathname]}
         >
           {RoutesConfig.map((route) => {
+            if (route?.noSidebar) return <></>;
             if (route?.admin && !isAdmin) return <></>;
             if (route?.submenu) {
               return (

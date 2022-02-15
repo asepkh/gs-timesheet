@@ -1,25 +1,22 @@
-import React from "react";
-import { Grid, Row, Col, Form, Input, Button } from 'antd';
+import { Grid, Row, Col, Form, Input, Button } from "antd";
 
 const { useBreakpoint } = Grid;
 
 const Biodata = () => {
   const screens = useBreakpoint();
-  console.log(screens)
+  console.log(screens);
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    console.log("Success:", values);
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   return (
     <div>
-      <h2 style={{ fontWeight: 700, textAlign: "center" }}>
-        BIODATA 
-      </h2>
+      <h2 style={{ fontWeight: 700, textAlign: "center" }}>BIODATA</h2>
       <Row>
         <Col xs={{ span: 24, offset: 1 }} md={{ span: 6 }}>
           Col
@@ -27,7 +24,7 @@ const Biodata = () => {
         <Col xs={{ span: 24, offset: 1 }} md={{ span: 16 }}>
           <Form
             name="basic"
-            wrapperCol={{span: 24}}
+            wrapperCol={{ span: 24 }}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -36,7 +33,9 @@ const Biodata = () => {
             <Form.Item
               label="Username"
               name="username"
-              rules={[{ required: true, message: 'Please input your username!' }]}
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -44,7 +43,9 @@ const Biodata = () => {
             <Form.Item
               label="Password"
               name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
             >
               <Input.Password />
             </Form.Item>
