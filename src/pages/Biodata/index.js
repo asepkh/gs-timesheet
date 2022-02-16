@@ -6,14 +6,13 @@ const { useBreakpoint } = Grid;
 
 const Biodata = () => {
   const screens = useBreakpoint();
-  console.log(screens)
 
   const onFinish = (values) => {
-    console.log('Success:', values);
+    console.log("Success:", values);
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+    console.log("Failed:", errorInfo);
   };
 
   const { loading, imageUrl } = React.useState('');
@@ -57,7 +56,9 @@ const Biodata = () => {
             <Form.Item
               label="Username"
               name="username"
-              rules={[{ required: true, message: 'Please input your username!' }]}
+              rules={[
+                { required: true, message: "Please input your username!" },
+              ]}
             >
               <Input />
             </Form.Item>
@@ -65,7 +66,9 @@ const Biodata = () => {
             <Form.Item
               label="Password"
               name="password"
-              rules={[{ required: true, message: 'Please input your password!' }]}
+              rules={[
+                { required: true, message: "Please input your password!" },
+              ]}
             >
               <Input.Password />
             </Form.Item>
