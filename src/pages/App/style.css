@@ -43,5 +43,19 @@
 
 .ant-upload.ant-upload-select-picture-card {
   width: 100%;
-  height: 25vh;
+  height: 200px;
+}
+
+@media only screen and (max-width: 990px) {
+  .ant-upload.ant-upload-select-picture-card {
+    width: 200px;
+    height: 200px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .ant-upload.ant-upload-select-picture-card {
+    width: 100px;
+    height: 100px;
+  }
 }

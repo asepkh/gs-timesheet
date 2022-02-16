@@ -6,6 +6,7 @@ const { useBreakpoint } = Grid;
 
 const Biodata = () => {
   const screens = useBreakpoint();
+  console.log(screens)
 
   const onFinish = (values) => {
     console.log("Success:", values);
@@ -26,21 +27,32 @@ const Biodata = () => {
   return (
     <div>
       <Row>
-        <Col xs={{ span: 24, offset: 1 }} md={{ span: 6 }}>
-          <Upload
-            name="avatar"
-            listType="picture-card"
-            className="avatar-uploader"
-            showUploadList={false}
-          >
-            {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
-          </Upload>
+        <Col xs={{ span: 24, offset: 1 }} md={{ span: 24 }} lg={{ span: 6 }}>
+          <Row>
+            <Col xs={{span: 12}} md={{ span: 12 }} lg={{ span: 24 }}>
+              <Upload
+                name="avatar"
+                listType="picture-card"
+                className="avatar-uploader"
+                showUploadList={false}
+              >
+                {imageUrl ? <img src={imageUrl} alt="avatar" style={{ width: '100%' }} /> : uploadButton}
+              </Upload>
+            </Col>
+            
+            <Col xs={{span: 12}} md={{ span: 12 }} lg={{ span: 24 }}>
+              <div style={{fontSize: 10}}>
+                <p>Besar file maksimal 2 MB</p>
+                <p>Ekstensi file: jpeg/jpg, png</p>
+              </div>
+            </Col>
+          </Row>
         </Col>
-        <Col xs={{ span: 24, offset: 1 }} md={{ span: 16 }}>
+        <Col xs={{ span: 24, offset: 1 }} md={{ span: 24 }} lg={{ span: 16 }}>
           <Form
             name="basic"
-            labelCol={{lg: {span: 5}, md: {span: 7}, sm: {span: 5}}}
-            wrapperCol={{lg: {span: 24, offset: 1}, md: {span: 24, offset: 1}, sm: {span: 16, offset: 1}}}
+            labelCol={{span: 5}}
+            wrapperCol={{lg: {span: 24, offset: 1}, md: {span: 16, offset: 1}, sm: {span: 16, offset: 1}}}
             initialValues={{ remember: true }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
