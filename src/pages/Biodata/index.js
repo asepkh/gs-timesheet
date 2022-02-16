@@ -1,6 +1,7 @@
 import React from "react";
 import { Grid, Row, Col, Form, Input, Button, Upload } from 'antd';
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
+import "./style.css";
 
 const { useBreakpoint } = Grid;
 
@@ -29,7 +30,7 @@ const Biodata = () => {
       <Row>
         <Col xs={{ span: 24, offset: 1 }} md={{ span: 24 }} lg={{ span: 6 }}>
           <Row>
-            <Col xs={{span: 12}} md={{ span: 12 }} lg={{ span: 24 }}>
+            <Col xs={{span: 12}} md={{ span: 10 }} lg={{ span: 24 }}>
               <Upload
                 name="avatar"
                 listType="picture-card"
@@ -40,7 +41,7 @@ const Biodata = () => {
               </Upload>
             </Col>
             
-            <Col xs={{span: 12}} md={{ span: 12 }} lg={{ span: 24 }}>
+            <Col xs={{span: 11, offset: 1}} md={{ span: 13, offset: 1 }} lg={{ span: 24 }}>
               <div style={{fontSize: 10}}>
                 <p>Besar file maksimal 2 MB</p>
                 <p>Ekstensi file: jpeg/jpg, png</p>
