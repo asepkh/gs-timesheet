@@ -4,7 +4,7 @@ import useController from "./controller";
 import { Table, Button } from "antd";
 import ModalUser from "@/components/ModalUser";
 
-const Users = () => {
+const Summary = () => {
   const [modal, setModal] = useState({
       visible: false,
       title: "Tambah Karyawan",
@@ -74,4 +74,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Summary;

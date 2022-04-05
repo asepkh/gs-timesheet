@@ -1,149 +1,72 @@
-import { useState, createElement, Suspense, lazy } from "react";
-import { Navigate, Route, Routes, Link, useLocation } from "react-router-dom";
-import { Layout, Menu } from "antd";
+import { useState, useEffect } from "react";
+import { Layout } from "antd";
+import "./style.less";
 
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
-import "./style.css";
+import { userStore } from "@/store";
+import { checkUser } from "@/services/user";
 
-import RoutesConfig from "@/configs/routes";
-import Icon from "@/helpers/Icon";
+import Login from "@/pages/Login";
+
 import LoadingScreen from "@/components/LoadingScreen";
+import Sidebar from "@/components/Sidebar";
+import Header from "@/components/Header";
+import Content from "@/components/Content";
 
-const { Header, Sider, Content } = Layout,
-  { SubMenu } = Menu;
-
-const isLogin = true,
-  isAdmin = true;
+const { Content: AntdContent } = Layout;
 
 const App = () => {
+  const [user, setUser] = userStore.use();
   const [collapsed, setCollapsed] = useState(false);
   const toggle = () => setCollapsed(!collapsed);
-  const location = useLocation();
 
-  return isLogin ? (
+  useEffect(() => {
+    if (!localStorage.getItem("token")) {
+      setUser({ ...user, isAuthenticated: true, isLogin: false });
+      return;
+    }
+
+    const authenticate = async () => {
+      try {
+        const result = await checkUser();
+        console.log(result);
+        await setUser({
+          ...user,
+          ...result?.data,
+          isAuthenticated: true,
+          isLogin: true,
+        });
+      } catch (error) {
+        console.log(error);
+        await setUser({
+          ...user,
+          isAuthenticated: true,
+          isLogin: false,
+          error,
+        });
+      }
+    };
+
+    authenticate();
+  }, []);
+
+  if (user.isAuthenticated && !user.isLogin) return <Login />;
+
+  return user?.isAuthenticated ? (
     <Layout className="container">
-      <Sider
-        breakpoint="md"
-        trigger={null}
-        collapsible
-        collapsed={collapsed}
-        width="250"
+      <Sidebar
+        isAdmin={user?.isAdmin}
         onBreakpoint={(broken) => setCollapsed(broken)}
-      >
-        <div className="logo">{!collapsed ? `GUDANG SOLUSI GROUP` : `GSG`}</div>
-        <Menu
-          theme="dark"
-          mode="inline"
-          defaultSelectedKeys={[location?.pathname]}
-        >
-          {RoutesConfig.map((route) => {
-            if (route?.noSidebar) return <></>;
-            if (route?.admin && !isAdmin) return <></>;
-            if (route?.submenu) {
-              return (
-                <SubMenu
-                  key={route?.title}
-                  icon={<Icon type={route?.icon} />}
-                  title={route?.title}
-                >
-                  {route?.submenu.map((submenu) => (
-                    <Menu.Item
-                      key={submenu?.path}
-                      icon={<Icon type={submenu?.icon} />}
-                    >
-                      <Link to={submenu?.path}>{submenu?.title}</Link>
-                    </Menu.Item>
-                  ))}
-                </SubMenu>
-              );
-            } else {
-              return (
-                <Menu.Item key={route?.path} icon={<Icon type={route?.icon} />}>
-                  <Link to={route?.path}>{route?.title}</Link>
-                </Menu.Item>
-              );
-            }
-          })}
-        </Menu>
-      </Sider>
+        collapsed={collapsed}
+      />
       <Layout className="site-layout">
-        <Header className="site-layout-background" style={{ padding: 0 }}>
-          {createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-            className: "trigger",
-            onClick: toggle,
-          })}
-          <div className="header-right">
-            <div className="user-info">ASEP KHAIRUL ANAM</div>
-          </div>
-        </Header>
-        <Content
-          className="site-layout-background"
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-          }}
-        >
-          <Routes>
-            {RoutesConfig.map((route, index) => {
-              if (!route?.submenu) {
-                const Component = lazy(() =>
-                  import(`@/pages/${route?.component}`)
-                );
-                return (
-                  <Route
-                    key={index}
-                    path={route?.path}
-                    index={route?.index || false}
-                    element={
-                      !route?.admin ? (
-                        <Suspense fallback={<LoadingScreen />}>
-                          <Component />
-                        </Suspense>
-                      ) : isAdmin ? (
-                        <Suspense fallback={<LoadingScreen />}>
-                          <Component />
-                        </Suspense>
-                      ) : (
-                        <Navigate to="/" />
-                      )
-                    }
-                  />
-                );
-              } else {
-                return route.submenu.map((submenu, index) => {
-                  const Component = lazy(() =>
-                    import(`@/pages/${submenu?.component}`)
-                  );
-                  return (
-                    <Route
-                      key={index}
-                      path={submenu?.path}
-                      index={submenu?.index || false}
-                      element={
-                        !route?.admin && !route?.submenu?.admin ? (
-                          <Suspense fallback={<LoadingScreen />}>
-                            <Component />
-                          </Suspense>
-                        ) : isAdmin ? (
-                          <Suspense fallback={<LoadingScreen />}>
-                            <Component />
-                          </Suspense>
-                        ) : (
-                          <Navigate to="/" />
-                        )
-                      }
-                    />
-                  );
-                });
-              }
-            })}
-          </Routes>
-        </Content>
+        <Header collapsed={collapsed} toggleCollapse={toggle} />
+        <Content isAdmin={user?.isAdmin} />
       </Layout>
     </Layout>
   ) : (
-    <Navigate to="/login" />
+    <div style={{ height: "100vh", width: "100vw" }}>
+      <LoadingScreen />
+    </div>
   );
 };
 

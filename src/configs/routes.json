@@ -36,10 +36,10 @@
         "component": "Projects"
       },
       {
-        "path": "/admin/reports",
-        "title": "Reports",
-        "icon": "SolutionOutlined",
-        "component": "Reports"
+        "path": "/admin/summary",
+        "title": "Summary Report",
+        "icon": "FileDoneOutlined",
+        "component": "Summary"
       }
     ]
   }

@@ -3,6 +3,8 @@
 import axios from "axios";
 import querystring from "qs";
 
+const DEFAULT_BASE_URL = process.env.REACT_APP_BASE_URL;
+
 const api = axios.create({
   timeout: 60000,
   headers: {
@@ -12,7 +14,7 @@ const api = axios.create({
 });
 
 const api_upload = axios.create({
-  timeout: 10000,
+  timeout: 120000,
   headers: {
     Accept: "application/json",
   },
@@ -26,7 +28,6 @@ export default {
    * @param {Object} form
    */
   put: (base_url, url, form = {}, json = {}) => {
-    
     const token = localStorage.getItem("token");
     api.defaults.headers.Authorization = `Bearer ${token}`;
     api.defaults.headers.common["Content-Type"] = json
@@ -36,7 +37,7 @@ export default {
     return api
       .put(url, data, {
         params: querystring.stringify(form),
-        baseURL: base_url,
+        baseURL: base_url || DEFAULT_BASE_URL,
       })
       .then((response) => Promise.resolve(response.data))
       .catch((err) => Promise.reject(err));
@@ -47,12 +48,11 @@ export default {
    * @param {Object} param query params
    */
   get: (base_url, url, customConfig = {}) => {
-    
     const token = localStorage.getItem("token");
     api.defaults.headers.Authorization = `Bearer ${token}`;
     return api
       .get(url, {
-        baseURL: base_url,
+        baseURL: base_url || DEFAULT_BASE_URL,
         ...customConfig,
       })
       .then((response) => Promise.resolve(response.data))
@@ -66,7 +66,6 @@ export default {
    * @param {Object} reqConfig  custom config for request
    */
   post: (base_url, url, form = null, json = {}, reqConfig = {}) => {
-    
     const token = localStorage.getItem("token");
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -77,7 +76,7 @@ export default {
     return api
       .post(url, data, {
         params: querystring.stringify(form),
-        baseURL: base_url,
+        baseURL: base_url || DEFAULT_BASE_URL,
         ...reqConfig,
       })
       .then((response) => Promise.resolve(response.data))
@@ -91,7 +90,6 @@ export default {
    * @param {Object} data
    */
   postData: (base_url, url, data = {}, customConfig = {}) => {
-    
     const token = localStorage.getItem("token");
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -105,7 +103,37 @@ export default {
         : formData.append(key, data[key]);
     });
     return api_upload
-      .post(url, formData, { baseURL: base_url, ...customConfig })
+      .post(url, formData, {
+        baseURL: base_url || DEFAULT_BASE_URL,
+        ...customConfig,
+      })
+      .then((response) => Promise.resolve(response.data))
+      .catch((err) => Promise.reject(err));
+  },
+
+  postDataMultiple: (url, data = {}, customConfig = {}) => {
+    const token = localStorage.getItem("accessToken");
+    api.defaults.headers.Authorization = `Bearer ${token}`;
+    api.defaults.headers["Content-Type"] = "multipart/form-data";
+    api.defaults.timeout = 30000;
+    const formData = new FormData();
+    const keys = Object.keys(data);
+    keys.forEach((key) => {
+      data[key] instanceof File
+        ? formData.append(key, data[key], data[key].name)
+        : formData.append(key, data[key]);
+      if (Array.isArray(data[key])) {
+        data[key].forEach((data2, index) => {
+          data2 instanceof File
+            ? formData.append(key, data[key][index], data[key][index].name)
+            : formData.append(key, data[key][index]);
+        });
+      }
+    });
+    return api
+      .post(url, formData, {
+        ...customConfig,
+      })
       .then((response) => Promise.resolve(response.data))
       .catch((err) => Promise.reject(err));
   },
@@ -118,10 +146,9 @@ export default {
    * }
    */
   delete: (base_url, url, params) => {
-    
     const token = localStorage.getItem("token");
     api.defaults.headers.Authorization = `Bearer ${token}`;
-    
+
     let newUrl = url;
     if (params) {
       const qparam = querystring.stringify(params);
@@ -129,7 +156,7 @@ export default {
     }
     return api
       .delete(newUrl, {
-        baseURL: base_url,
+        baseURL: base_url || DEFAULT_BASE_URL,
       })
       .then((response) => Promise.resolve(response.data))
       .catch((err) => Promise.reject(err));
@@ -141,7 +168,6 @@ export default {
    *   id: [1,2,3]
    * }
    */ deleteData: (base_url, url, payload) => {
-    
     const token = localStorage.getItem("token");
     api.defaults.headers.Authorization = `Bearer ${token}`;
 
@@ -150,7 +176,7 @@ export default {
         url,
         { data: payload },
         {
-          baseURL: base_url,
+          baseURL: base_url || DEFAULT_BASE_URL,
         }
       )
       .then((response) => Promise.resolve(response.data))
@@ -163,7 +189,6 @@ export default {
    * @param {Object} data
    */
   putData: (base_url, url, data = {}, customConfig = {}) => {
-    
     const token = localStorage.getItem("token");
     api.defaults.headers.Authorization = `Bearer ${token}`;
     api.defaults.headers["Content-Type"] = "multipart/form-data";
@@ -176,7 +201,10 @@ export default {
         : formData.append(key, data[key]);
     });
     return api
-      .put(url, formData, { baseURL: base_url, ...customConfig })
+      .put(url, formData, {
+        baseURL: base_url || DEFAULT_BASE_URL,
+        ...customConfig,
+      })
       .then((response) => Promise.resolve(response.data))
       .catch((err) => Promise.reject(err));
   },

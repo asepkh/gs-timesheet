@@ -20,3 +20,19 @@
   height: 80px;
   text-align: center;
 }
+
+#calendar .weekend {
+  color: red;
+}
+
+#calendar .weekend:hover,
+.workday:hover {
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+#calendar .blank,
+.blank:hover {
+  cursor: inherit !important;
+  background-color: #ddd !important;
+}

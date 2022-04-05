@@ -1,0 +1,62 @@
+
+
+GET /timesheet/:id_user?bulan=12&tahun=2022
+
+data:
+{
+    1: {content: [
+        {
+            company: "RICI",
+            workHours: "8",
+            keterangan: "GA ada lembur"
+        },
+        {
+            company: "RITA",
+            workHours: "8",
+            keterangan: "GA ada lembur"
+        },
+    ], totalWorkHours: 18},
+    2: [
+        {
+            company: "RICI",
+            workHours: "8",
+            keterangan: "GA ada lembur"
+
+        }
+    ],
+    totalWorkHours: "24"
+}
+
+
+POST /timesheet
+
+{
+    tanggal: 12,
+    bulan: 9,
+    tahun: 2022,
+    data: [
+        {
+            company: "RICI",
+            workHours: "8",
+        },
+        {
+            company: "RITA",
+            workHours: "8",
+            keterangan: "GA ada lembur"
+        }
+    ]
+}
+
+PUT /timesheet
+
+{
+    tanggal: 12,
+    bulan: 9,
+    tahun: 2022,
+    data: [
+        {
+            company: "RICI",
+            workHours: "8",
+        },
+    ]
+}

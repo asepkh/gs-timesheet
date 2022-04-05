@@ -1,25 +1,28 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
+
+import { QueryClientProvider, QueryClient } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import reportWebVitals from "./reportWebVitals";
 
 import App from "@/pages/App";
-import Login from "@/pages/Login";
 
 import moment from "moment";
 import "moment/locale/id";
 
 moment.locale("id");
+const queryClient = new QueryClient();
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/*" element={<App />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

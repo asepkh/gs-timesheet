@@ -1,48 +1,96 @@
-import { Form, Input, Button, Checkbox, Card } from "antd";
+import { Form, Input, Button, Checkbox, Card, message } from "antd";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { useMutation } from "react-query";
+
+import { login } from "@/services/user";
+import { userStore } from "@/store";
+
+import "./style.css";
 
 const Login = () => {
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
+  const [form] = Form.useForm(),
+    [user, setUser] = userStore.use();
+
+  const mutation = useMutation(
+    (values) => {
+      return login(values);
+    },
+    {
+      onSuccess: ({ data }) => {
+        message.success("Login Success");
+        setTimeout(() => {
+          setUser({ ...user, isLogin: true, ...data.user });
+          localStorage.setItem("token", data?.token);
+        }, 1000);
+      },
+      onError: (error) => {
+        message.error(error?.response?.data?.errorMessage || "Login failed");
+        console.log(error?.response?.data?.errorMessage || "Login failed");
+      },
+    }
+  );
 
   return (
     <div
       style={{ display: "flex", justifyContent: "center", paddingTop: "5rem" }}
     >
       <Card
-        title="Login TimeSheet Gudang Solusi"
+        title="Login Gudang Solusi Timesheet"
         bordered={false}
         style={{ width: 500 }}
       >
         <Form
-          name="basic"
-          initialValues={{ remember: true }}
-          onFinish={onFinish}
-          autoComplete="off"
+          form={form}
+          name="login"
+          className="login-form"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={mutation.mutate}
         >
           <Form.Item
-            label="Username"
-            name="username"
-            rules={[{ required: true, message: "Please input your username!" }]}
+            name="email"
+            rules={[
+              {
+                required: true,
+                message: "Please input your email!",
+              },
+            ]}
           >
-            <Input />
+            <Input
+              prefix={<UserOutlined className="site-form-item-icon" />}
+              placeholder="E-mail"
+            />
           </Form.Item>
-
           <Form.Item
-            label="Password"
             name="password"
-            rules={[{ required: true, message: "Please input your password!" }]}
+            rules={[
+              {
+                required: true,
+                message: "Please input your Password!",
+              },
+            ]}
           >
-            <Input.Password />
+            <Input
+              prefix={<LockOutlined className="site-form-item-icon" />}
+              type="password"
+              placeholder="Password"
+            />
           </Form.Item>
-
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
+          <Form.Item>
+            <Form.Item name="remember" valuePropName="checked" noStyle>
+              <Checkbox>Remember me</Checkbox>
+            </Form.Item>
           </Form.Item>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Submit
+            <Button
+              type="primary"
+              htmlType="submit"
+              loading={mutation.isLoading}
+              className="login-form-button"
+            >
+              Log in
             </Button>
           </Form.Item>
         </Form>
