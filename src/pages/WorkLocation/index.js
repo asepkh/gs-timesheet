@@ -2,34 +2,23 @@ import { useState } from "react";
 import useController from "./controller";
 
 import { Table, Button } from "antd";
-import ModalUser from "@/components/ModalUser";
+import ModalWorkLocation from "@/components/ModalWorkLocation";
 
-const Users = () => {
+const WorkLocation = () => {
   const [modal, setModal] = useState({
+      initialValues: {},
+      title: "Tambah Work Location",
       visible: false,
-      title: "Tambah Karyawan",
-      initialValues: { isAdmin: false, gender: "Male" },
     }),
     [page, setPage] = useState(1);
-
-  const {
-    userColumn,
-    userData,
-    isLoading,
-    isFetching,
-    totalPages,
-    register,
-    update,
-  } = useController({
-    queries: { page },
-    modal,
-    setModal: (value) => setModal({ ...modal, ...value }),
+  const { column, data, isLoading, totalPages, add, update } = useController({
+    queries: { page: 1 },
+    setModal: (values) => setModal({ ...modal, ...values }),
   });
 
   const onFinish = (values) => {
     console.log("Success:", values);
-
-    if (modal?.title === "Tambah Karyawan") register.mutate(values);
+    if (modal.title === "Tambah Work Location") add.mutate(values);
     else update.mutate(values);
   };
 
@@ -39,34 +28,35 @@ const Users = () => {
         <Button
           onClick={() =>
             setModal({
-              title: "Tambah Karyawan",
-              initialValues: { isAdmin: false },
+              initialValues: {},
+              title: "Tambah Work Location",
               visible: true,
             })
           }
           type="primary"
         >
-          Tambah Karyawan
+          Tambah Work Location
         </Button>
       </div>
 
       <Table
-        columns={userColumn}
-        dataSource={userData}
-        loading={isLoading || isFetching}
+        columns={column}
+        dataSource={data}
+        loading={isLoading}
         pagination={{
           total: totalPages,
           current: page,
           onChange: (currentPage) => setPage(currentPage),
         }}
       />
-      <ModalUser
+
+      <ModalWorkLocation
         {...modal}
         onFinish={onFinish}
         onCancel={() =>
           setModal({
             ...modal,
-            initialValues: { isAdmin: false, gender: "Male" },
+            initialValues: {},
             visible: false,
           })
         }
@@ -75,4 +65,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default WorkLocation;

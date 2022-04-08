@@ -6,11 +6,13 @@ const register = (payload) => api.post(null, "pub/register", null, payload),
   login = (payload) => api.post(null, "pub/login", null, payload),
   updateUser = (id, payload) =>
     api.put(null, `api/v1/user/${id}`, null, payload),
-  updateProfile = (payload) => api.patch(null, `api/v1/profile`, null, payload),
+  updateProfile = (payload) => api.put(null, `api/v1/profile`, null, payload),
   getUser = (queries = {}) =>
     api.get(null, `api/v1/admin/user${queries?.id ? `/${queries?.id}` : ``}`, {
       params: queries,
-    });
+    }),
+  changePassword = (payload) =>
+    api.post(null, `api/v1/changePassword`, null, payload);
 
 export {
   register,
@@ -20,4 +22,5 @@ export {
   removeUser,
   updateUser,
   updateProfile,
+  changePassword,
 };

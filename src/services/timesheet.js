@@ -6,6 +6,14 @@ const addTimesheet = (payload) =>
   getTimesheet = (queries = {}) =>
     api.get(null, `api/v1/timesheet${queries?.id ? `/${queries?.id}` : ``}`, {
       params: queries,
-    });
+    }),
+  getDataSummary = (queries = {}) =>
+    api.get(
+      null,
+      `api/v1/admin/data-summary${queries?.id ? `/${queries?.id}` : ``}`,
+      {
+        params: queries,
+      }
+    );
 
-export { addTimesheet, getTimesheet, removeTimesheet };
+export { addTimesheet, getTimesheet, removeTimesheet, getDataSummary };

@@ -1,17 +1,11 @@
-import { useEffect } from "react";
-import { useQuery, useMutation } from "react-query";
-import {
-  getUser,
-  removeUser,
-  register as addUser,
-  updateUser,
-} from "@/services/user";
-import { userStore } from "@/store";
+import { Fragment, useEffect } from "react";
+import { useQuery } from "react-query";
+import moment from "moment";
 
-import Icon from "@/helpers/Icon";
-import { Button, message, Popconfirm, Row, Tooltip } from "antd";
+import { getDataSummary } from "@/services/timesheet";
+import { message } from "antd";
 
-const useController = ({ queries, setModal }) => {
+const useController = ({ queries }) => {
   const {
     data: res,
     isLoading,
@@ -19,55 +13,7 @@ const useController = ({ queries, setModal }) => {
     isError,
     error,
     refetch,
-  } = useQuery(["user", queries], () => getUser({ page: 1 }));
-  const user = userStore.useValue();
-
-  const register = useMutation(
-    (values) => {
-      return addUser(values);
-    },
-    {
-      onSuccess: () => {
-        message.success("User Added Successfully");
-        refetch();
-      },
-      onError: (error) => {
-        message.error(error?.response?.data?.errorMessage || "Add User Failed");
-      },
-    }
-  );
-
-  const update = useMutation(
-    (values) => {
-      return updateUser(values?.id, values);
-    },
-    {
-      onSuccess: () => {
-        message.success("User Update Successfully");
-        refetch();
-      },
-      onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Update User Failed"
-        );
-      },
-    }
-  );
-
-  const remove = useMutation(
-    (id) => {
-      return removeUser(id);
-    },
-    {
-      onSuccess: () => {
-        message.success("User Deleted Successfully");
-        refetch();
-      },
-      onError: (error) => {
-        message.error(error?.response?.data?.errorMessage || "Delete Failed");
-      },
-    }
-  );
+  } = useQuery(["dataSummaryAll", queries], () => getDataSummary(queries));
 
   useEffect(() => {
     if (!isError) return;
@@ -75,7 +21,7 @@ const useController = ({ queries, setModal }) => {
     message.error(error);
   }, [isError, error]);
 
-  const userColumn = [
+  const column = [
     {
       title: "#",
       key: "i",
@@ -85,111 +31,82 @@ const useController = ({ queries, setModal }) => {
       width: "40pt",
     },
     {
-      key: "profilePic",
-      dataIndex: "profilePic",
-      align: "center",
-      render: (value) => (
-        <img src={value} className="profile_picture" alt="profile" />
-      ),
-    },
-    {
       title: "Name",
       key: "name",
       dataIndex: "name",
     },
     {
-      title: "Email",
-      key: "email",
-      dataIndex: "email",
-    },
-    {
-      title: "Phone Number",
-      key: "phone",
-      dataIndex: "phone",
-    },
-    {
-      title: "Role",
-      key: "role",
-      dataIndex: "role",
-    },
-    {
-      title: "Gender",
-      key: "gender",
-      dataIndex: "gender",
-    },
-    {
-      title: "Admin Privilege",
-      key: "isAdmin",
-      dataIndex: "isAdmin",
+      title: "Keterangan",
       align: "center",
-      render: (value) =>
-        value ? (
-          <Icon
-            type="CheckSquareFilled"
-            style={{ color: "#00e600", fontSize: 30 }}
-          />
-        ) : (
-          <Icon
-            type="CloseSquareFilled"
-            style={{ color: "red", fontSize: 30 }}
-          />
-        ),
+      children: [
+        {
+          title: "Hadir",
+          key: "hadir",
+          dataIndex: "hadir",
+          align: "center",
+        },
+        {
+          title: "Izin",
+          key: "izin",
+          dataIndex: "izin",
+          align: "center",
+        },
+        {
+          title: "Sakit",
+          key: "sakit",
+          dataIndex: "sakit",
+          align: "center",
+        },
+        {
+          title: "Cuti",
+          key: "cuti",
+          dataIndex: "cuti",
+          align: "center",
+        },
+      ],
     },
     {
-      title: "Action",
-      key: "action",
-      dataIndex: "action",
+      title: "Jam Kerja",
       align: "center",
-      width: "120pt",
+      children: [
+        {
+          title: "Total",
+          key: "totalHours",
+          dataIndex: "totalHours",
+          align: "center",
+        },
+        {
+          title: "Overtime",
+          key: "totalOvertime",
+          dataIndex: "totalOvertime",
+          align: "center",
+        },
+      ],
+    },
+    {
+      title: "Keterangan Tertulis",
+      key: "keterangan",
+      dataIndex: "keterangan",
     },
   ];
 
-  const userData =
-    res?.data?.rows?.length > 0
-      ? res?.data?.rows?.map((d, i) => ({
+  const data =
+    res?.data?.length > 0
+      ? res?.data?.map((d, i) => ({
           ...d,
           i,
+          ...d.timesheets,
           name: d?.firstName + " " + d?.lastName,
-          phone: d?.phone || "-",
-          role: d?.role || "-",
-          action: (
-            <Row key={i} justify="center">
-              <Tooltip placement="topLeft" title="Timesheet">
-                <Button className="button-action" type="primary">
-                  <Icon type="CalendarFilled" />
-                </Button>
-              </Tooltip>
-              <Tooltip placement="topLeft" title="Edit">
-                <Button
-                  className="button-action"
-                  type="danger"
-                  onClick={() =>
-                    setModal({
-                      initialValues: d,
-                      title: "Edit Karyawan",
-                      visible: true,
-                    })
-                  }
-                  ghost
-                >
-                  <Icon type="EditFilled" />
-                </Button>
-              </Tooltip>
-              {d?.id !== user?.id && (
-                <Popconfirm
-                  title="Are you sure？"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() => remove.mutate(d?.id)}
-                >
-                  <Tooltip placement="topLeft" title="Remove">
-                    <Button className="button-action" type="danger">
-                      <Icon type="DeleteFilled" />
-                    </Button>
-                  </Tooltip>
-                </Popconfirm>
-              )}
-            </Row>
+          totalOvertime: d?.timesheets?.totalHours - res?.totalWorkHours,
+          keterangan: d?.timesheets?.descriptions?.map((item, index) =>
+            item?.description ? (
+              <div className="keterangan" key={index}>
+                - <b>{moment(item?.date).format("DD MMMM YYYY")}: </b>{" "}
+                {item?.description}
+              </div>
+            ) : (
+              <Fragment key={index} />
+            )
           ),
         }))
       : [
@@ -197,27 +114,22 @@ const useController = ({ queries, setModal }) => {
             i: 0,
             name: "-",
             email: "-",
-            role: "-",
-            admin: "-",
-            action: "-",
-            profilePic: "http://",
           },
         ];
 
   return {
-    userColumn,
-    userData,
+    column,
+    data,
     isLoading,
     isFetching,
+    refetch,
+    res,
     totalPages: res?.data?.totalPages,
-    register,
-    update,
   };
 };
 
 useController.defaultProps = {
   page: 1,
-  setModal: () => {},
 };
 
 export default useController;

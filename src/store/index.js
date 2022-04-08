@@ -3,6 +3,7 @@ import { newRidgeState } from "react-ridge-state";
 const initialState = {
   isAuthenticated: false,
   isLogin: false,
+  refetch: () => {},
 };
 
 const userStore = newRidgeState(initialState);

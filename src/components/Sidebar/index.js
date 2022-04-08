@@ -11,7 +11,7 @@ const { Sider } = Layout,
 const Sidebar = ({ isAdmin, ...props }) => {
   const location = useLocation();
   return (
-    <Sider breakpoint="md" trigger={null} collapsible width="250" {...props}>
+    <Sider breakpoint="lg" trigger={null} collapsible width="250" {...props}>
       <div className="logo">
         {!props?.collapsed ? `GUDANG SOLUSI GROUP` : `GSG`}
       </div>

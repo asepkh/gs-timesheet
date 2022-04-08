@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { useQuery, useMutation } from "react-query";
 import {
-  getProject,
-  removeProject,
-  addProject,
-  updateProject,
-} from "@/services/project";
+  getWorkLocation,
+  removeWorkLocation,
+  addWorkLocation,
+  updateWorkLocation,
+} from "@/services/workLocation";
 
 import Icon from "@/helpers/Icon";
 import { Button, message, Popconfirm, Row, Tooltip } from "antd";
@@ -17,21 +17,21 @@ const useController = ({ queries, setModal }) => {
     isError,
     error,
     refetch,
-  } = useQuery(["project", queries], () => getProject({ page: 1 }));
+  } = useQuery(["workLocation", queries], () => getWorkLocation({ page: 1 }));
 
   const add = useMutation(
     (values) => {
-      return addProject(values);
+      return addWorkLocation(values);
     },
     {
       onSuccess: () => {
-        message.success("Project Added Successfully");
+        message.success("Work Location Added Successfully");
         setModal({ visible: false });
         refetch();
       },
       onError: (error) => {
         message.error(
-          error?.response?.data?.errorMessage || "Add Project Failed"
+          error?.response?.data?.errorMessage || "Add Work Location Failed"
         );
       },
     }
@@ -39,11 +39,11 @@ const useController = ({ queries, setModal }) => {
 
   const update = useMutation(
     (values) => {
-      return updateProject(values?.id, values);
+      return updateWorkLocation(values?.id, values);
     },
     {
       onSuccess: () => {
-        message.success("Project Updated Successfully");
+        message.success("Work Location Updated Successfully");
         setModal({ visible: false });
         refetch();
       },
@@ -55,11 +55,11 @@ const useController = ({ queries, setModal }) => {
 
   const remove = useMutation(
     (id) => {
-      return removeProject(id);
+      return removeWorkLocation(id);
     },
     {
       onSuccess: () => {
-        message.success("Project Deleted Successfully");
+        message.success("Work Location Deleted Successfully");
         refetch();
       },
       onError: (error) => {
@@ -117,7 +117,7 @@ const useController = ({ queries, setModal }) => {
                   onClick={() =>
                     setModal({
                       initialValues: d,
-                      title: "Edit Project",
+                      title: "Edit Work Location",
                       visible: true,
                     })
                   }

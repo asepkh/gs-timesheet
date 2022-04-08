@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
+import "./index.less";
 
 import { QueryClientProvider, QueryClient } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";

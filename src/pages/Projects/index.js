@@ -13,7 +13,7 @@ const Projects = () => {
     [page, setPage] = useState(1);
   const { column, data, isLoading, totalPages, add, update } = useController({
     queries: { page: 1 },
-    setModal,
+    setModal: (values) => setModal({ ...modal, ...values }),
   });
 
   const onFinish = (values) => {

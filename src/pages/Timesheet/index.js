@@ -1,9 +1,14 @@
 import moment from "moment";
-import { useState /*, useEffect*/ } from "react";
+import { useEffect, useState /*, useEffect*/ } from "react";
 
 import { useQuery, useMutation } from "react-query";
 import { getProject } from "@/services/project";
-import { addTimesheet, getTimesheet } from "@/services/timesheet";
+import { getWorkLocation } from "@/services/workLocation";
+import {
+  addTimesheet,
+  getTimesheet,
+  removeTimesheet,
+} from "@/services/timesheet";
 
 import { Card, Row, Select, message } from "antd";
 import Calendar from "@/components/Calendar";
@@ -17,21 +22,30 @@ const Timesheet = () => {
     month: moment().format("M"),
   });
   const [modal, setModal] = useState({ visible: false, date: null });
-  // const [workData, setWorkData] = useState({});
   const dateFormat = date?.year + "-" + date?.month;
 
   const { data: companyList } = useQuery("projectAll", () => getProject(), {
-    refetchOnWindowFocus: false,
-  });
+      refetchOnWindowFocus: false,
+    }),
+    { data: workLocationList } = useQuery(
+      "workLocationsAll",
+      () => getWorkLocation(),
+      {
+        refetchOnWindowFocus: false,
+      }
+    );
 
   const {
-    data: workData,
+    data: timesheet,
     isLoading,
     isFetching,
     isError,
     error,
-  } = useQuery(["timesheet", { date: dateFormat }], () =>
-    getTimesheet({ date: dateFormat })
+    refetch,
+  } = useQuery(
+    ["timesheet", { date: dateFormat }],
+    () => getTimesheet({ date: dateFormat }),
+    { refetchOnWindowFocus: false }
   );
 
   const add = useMutation(
@@ -41,7 +55,8 @@ const Timesheet = () => {
     {
       onSuccess: () => {
         message.success("Timesheet Saved Successfully");
-        // refetch();
+        setModal({ ...modal, visible: false });
+        refetch();
       },
       onError: (error) => {
         message.error(
@@ -51,10 +66,48 @@ const Timesheet = () => {
     }
   );
 
+  const remove = useMutation(
+    (id) => {
+      return removeTimesheet(id);
+    },
+    {
+      onSuccess: () => {
+        message.success("Timesheet Removed Successfully");
+        refetch();
+      },
+      onError: (error) => {
+        message.error(
+          error?.response?.data?.errorMessage || "Remove Timesheet Failed"
+        );
+      },
+    }
+  );
+
   const onFinish = (values) => {
     console.log(values);
     add.mutate(values);
   };
+
+  const onRemove = (id) => {
+    if (!id) return;
+    remove.mutate(id);
+  };
+
+  useEffect(() => {
+    if (!isError) return;
+
+    message.error(error);
+  }, [isError, error]);
+
+  useEffect(() => {
+    if (isLoading || isFetching) return;
+
+    message.loading({
+      content: "Loading...",
+      duration: 0.5,
+      key: "loadingTimesheet",
+    });
+  }, [isLoading, isFetching]);
 
   return (
     <Card>
@@ -115,12 +168,33 @@ const Timesheet = () => {
       </Row>
       <Calendar
         date={dateFormat}
-        onClickDay={(data) => setModal({ visible: true, data })}
+        data={timesheet?.data}
+        onClickDay={(data) => {
+          setModal({
+            visible: true,
+            data,
+            initialValues: {
+              timesheets:
+                data?.timesheets?.length > 0
+                  ? data?.timesheets
+                  : [
+                      {
+                        workHours: 0,
+                        date: data?.date,
+                        izin: "hadir",
+                      },
+                    ],
+            },
+          });
+          console.log(data);
+        }}
       />
       <ModalTimesheet
         {...modal}
         onFinish={onFinish}
+        onRemove={onRemove}
         companyList={companyList?.data?.rows || []}
+        workLocationList={workLocationList?.data?.rows || []}
         onCancel={() => setModal({ visible: false, date: null })}
       />
     </Card>

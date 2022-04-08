@@ -12,8 +12,6 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import Content from "@/components/Content";
 
-const { Content: AntdContent } = Layout;
-
 const App = () => {
   const [user, setUser] = userStore.use();
   const [collapsed, setCollapsed] = useState(false);
@@ -34,6 +32,7 @@ const App = () => {
           ...result?.data,
           isAuthenticated: true,
           isLogin: true,
+          refetch: authenticate,
         });
       } catch (error) {
         console.log(error);
@@ -41,6 +40,7 @@ const App = () => {
           ...user,
           isAuthenticated: true,
           isLogin: false,
+          refetch: authenticate,
           error,
         });
       }

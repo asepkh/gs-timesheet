@@ -1,14 +1,34 @@
 import { useEffect } from "react";
 import moment from "moment";
-import "./styles.css";
+import "./styles.less";
+import { Badge, Tag } from "antd";
 
-const Calendar = ({ date, workData, onClickDay }) => {
+const Calendar = ({ date, data, onClickDay }) => {
   const weekDays = moment.weekdays(),
     daysInMonth = moment(date).daysInMonth(),
     firstDay = parseInt(moment(date).startOf("month").format("d")),
+    nationalDay = (day) =>
+      data?.nationalHolidays?.filter(
+        (e) =>
+          e.holiday_date ===
+          moment(`${moment(date).format("YYYY-MM")}-${day}`).format("YYYY-MM-D")
+      ).length > 0
+        ? data?.nationalHolidays?.filter(
+            (e) =>
+              e.holiday_date ===
+              moment(`${moment(date).format("YYYY-MM")}-${day}`).format(
+                "YYYY-MM-D"
+              )
+          )[0]?.holiday_name
+        : false,
     isWeekend = (day) =>
       moment(`${moment(date).format("YYYY-MM")}-${day}`).isoWeekday() === 6 ||
-      moment(`${moment(date).format("YYYY-MM")}-${day}`).isoWeekday() === 7;
+      moment(`${moment(date).format("YYYY-MM")}-${day}`).isoWeekday() === 7 ||
+      data?.nationalHolidays?.filter(
+        (e) =>
+          e.holiday_date ===
+          moment(`${moment(date).format("YYYY-MM")}-${day}`).format("YYYY-MM-D")
+      ).length > 0;
 
   const tableData = [
     ...[...Array(firstDay)].map((_, i) => null),
@@ -25,22 +45,22 @@ const Calendar = ({ date, workData, onClickDay }) => {
 
   const tableRows = [...Array(totalRows)].map((_, i) =>
     [...Array(7)].map((_, ii) => {
-      const day = tableData[i * 7 + ii] || null;
+      const day = tableData[i * 7 + ii] || null,
+        workDatas =
+          data?.timesheets?.filter(
+            (d) =>
+              d.date ===
+              moment(`${moment(date).format("YYYY-MM")}-${day}`).format(
+                "YYYY-MM-DD"
+              )
+          ) || [];
       const tableRowsData = {
         day,
         date: moment(`${moment(date).format("YYYY-MM")}-${day}`).format(
           "YYYY-MM-DD"
         ),
-        workData:
-          workData?.data?.rows?.filter(
-            (data) =>
-              data.date ===
-              moment(`${moment(date).format("YYYY-MM")}-${day}`).format(
-                "YYYY-MM-DD"
-              )
-          ) || [],
-        // workData: workData[day],
-        // totalWorkHours: sumArrayOfObject(workData[day], "workHours") || null,
+        timesheets: workDatas,
+        totalWorkHours: sumArrayOfObject(workDatas, "workHours"),
       };
       return tableRowsData;
     })
@@ -61,7 +81,10 @@ const Calendar = ({ date, workData, onClickDay }) => {
         </tr>
         <tr>
           {weekDays.map((day, i) => (
-            <th key={i} className={(i === 0 || i === 6) && "weekend"}>
+            <th
+              key={i}
+              className={((i === 0 || i === 6) && "weekend") || "weekday"}
+            >
               {day}
             </th>
           ))}
@@ -70,19 +93,24 @@ const Calendar = ({ date, workData, onClickDay }) => {
       <tbody>
         {tableRows.map((row, i) => (
           <tr key={i} className="days">
-            {row.map((data, ii) => (
+            {row.map((d, ii) => (
               <td
-                className={`${!data?.day ? "blank" : ""} ${
-                  isWeekend(data?.day) ? "weekend" : "workday"
+                className={`${!d?.day ? "blank" : ""} ${
+                  isWeekend(d?.day) ? "weekend" : "workday"
                 }`}
                 key={ii}
-                onClick={() => (data?.day && onClickDay(data)) || {}}
+                onClick={() => (d?.day && onClickDay(d)) || {}}
               >
-                {data?.day}
+                {nationalDay(d?.day) ? (
+                  <Tag className="national-holiday" color="red">
+                    {nationalDay(d?.day)}
+                  </Tag>
+                ) : (
+                  <></>
+                )}
+                <b>{d?.day}</b>
                 <br />
-                {data?.day && data?.totalWorkHours
-                  ? data?.totalWorkHours + " Jam"
-                  : ""}
+                {d?.day && d?.totalWorkHours ? d?.totalWorkHours + " Jam" : ""}
               </td>
             ))}
             <td>
@@ -95,11 +123,26 @@ const Calendar = ({ date, workData, onClickDay }) => {
 
         <tr>
           <td colSpan="6" style={{ textAlign: "left" }}>
-            Keterangan: <br /> - {moment(date).format("DD MMMM YYYY")}: Overtime
-            untuk mengerjakan projek lain
+            Keterangan: <br />
+            {data?.timesheets?.map((d) =>
+              d?.description || d?.izin !== "hadir" ? (
+                <>
+                  - {moment(d?.date).format("DD MMMM YYYY")}:{" "}
+                  {d.izin.charAt(0).toUpperCase() + d.izin.slice(1)} -{" "}
+                  {d?.description || "Tanpa Keterangan"}
+                  <br />
+                </>
+              ) : (
+                <></>
+              )
+            )}
           </td>
           <td style={{ textAlign: "center" }}>TOTAL</td>
-          <td style={{ textAlign: "center" }}>54 Jam</td>
+          <td style={{ textAlign: "center" }}>
+            {sumArrayOfObject(data?.timesheets, "workHours")
+              ? sumArrayOfObject(data?.timesheets, "workHours") + " Jam"
+              : "-"}
+          </td>
         </tr>
       </tbody>
     </table>
@@ -108,22 +151,9 @@ const Calendar = ({ date, workData, onClickDay }) => {
 
 Calendar.defaultProps = {
   date: moment().format("YYYY-MM"),
-  // workData: [{
-  //   1: [
-  //     {
-  //       company: "RICI",
-  //       workHours: 9,
-  //       keterangan: "Lembur menyelesaikan deadline aplikasi",
-  //     },
-  //     { company: "RICI", workHours: 8 },
-  //   ],
-  //   2: [{ company: "RICI", workHours: 8 }],
-  //   3: [{ company: "RICI", workHours: 8 }],
-  //   4: [{ company: "RICI", workHours: 8 }],
-  // }],
-  workData: [],
-  onClickDay: (data) => {
-    console.log(data);
+  data: { timesheets: [] },
+  onClickDay: (d) => {
+    console.log(d);
   },
 };
 export default Calendar;

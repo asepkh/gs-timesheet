@@ -31,12 +31,12 @@ const ModalUser = ({
           .then((values) => {
             onFinish(values);
             form.resetFields();
-            onCancel();
           })
           .catch((info) => {
             console.log("Validate Failed:", info);
           });
       }}
+      width={600}
     >
       <Form
         {...otherProps}

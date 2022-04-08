@@ -7,6 +7,7 @@ import {
   Select,
   Input,
   InputNumber,
+  Popconfirm,
 } from "antd";
 import Icon from "@/helpers/Icon";
 
@@ -18,9 +19,11 @@ const ModalTimesheet = ({
   onCancel,
   onFinish,
   companyList,
+  workLocationList,
   data,
   timesheetData,
   initialValues,
+  onRemove,
   ...otherProps
 }) => {
   const [form] = Form.useForm();
@@ -43,13 +46,12 @@ const ModalTimesheet = ({
         visible={visible}
         onCancel={onCancel}
         centered
+        okText="Save"
         onOk={() => {
           form
             .validateFields()
             .then((values) => {
               onFinish(values);
-              form.resetFields();
-              onCancel();
             })
             .catch((info) => {
               console.log("Validate Failed:", info);
@@ -59,15 +61,28 @@ const ModalTimesheet = ({
         <Form.List name="timesheets" initialValue={[{ workHours: undefined }]}>
           {(fields, { add, remove }) => (
             <>
-              {fields.map(({ key, name, ...restField }) => (
-                <div className="timesheet-row">
-                  {parseInt(name) > 0 && (
-                    <Icon
-                      type="CloseOutlined"
-                      className="button-remove"
-                      onClick={() => remove(name)}
-                    />
-                  )}
+              {fields.map(({ key, name, ...restField }, index) => (
+                <div className="timesheet-row" key={index}>
+                  {((parseInt(name) > 0 ||
+                    form.getFieldValue(["timesheets", name, "id"])) && (
+                    <Popconfirm
+                      title="Are you sure？"
+                      okText="Yes"
+                      cancelText="No"
+                      onConfirm={async () => {
+                        const id = form.getFieldValue([
+                          "timesheets",
+                          name,
+                          "id",
+                        ]);
+                        if (id) await onRemove(id);
+
+                        remove(name);
+                      }}
+                    >
+                      <Icon type="CloseOutlined" className="button-remove" />
+                    </Popconfirm>
+                  )) || <></>}
                   <Form.Item
                     {...restField}
                     name={[name, "workHours"]}
@@ -78,27 +93,15 @@ const ModalTimesheet = ({
                       { required: true, message: "Jam Kerja harus diisi" },
                     ]}
                   >
-                    {/* <TimePicker
-                      showNow={false}
-                      format="H"
-                      style={{ width: "100%" }}
-                    /> */}
                     <InputNumber placeholder="E.g: 8" min={0} max={24} />
                   </Form.Item>
                   <Form.Item
                     {...restField}
                     name={[name, "projectId"]}
-                    label="Project Company"
-                    required
-                    tooltip="Required"
-                    rules={[
-                      {
-                        required: true,
-                        message: "Project Company harus diisi",
-                      },
-                    ]}
+                    label="Project Name"
+                    tooltip="Kosongkan jika izin / cuti / sakit"
                   >
-                    <Select placeholder="Pilih Project Company">
+                    <Select placeholder="Pilih Project Name">
                       {companyList.map((item, index) => (
                         <Option value={item?.id || item} key={index}>
                           {item?.name || item}
@@ -108,11 +111,38 @@ const ModalTimesheet = ({
                   </Form.Item>
                   <Form.Item
                     {...restField}
-                    name={[name, "description"]}
-                    label="Keterangan"
-                    tooltip="Optional"
+                    name={[name, "workLocationId"]}
+                    label="Work Location"
+                    tooltip="Kosongkan jika izin / cuti / sakit"
                   >
-                    <TextArea rows={2} placeholder="Keterangan (Opsional)" />
+                    <Select placeholder="Pilih Work Location">
+                      {workLocationList.map((item, index) => (
+                        <Option value={item?.id || item} key={index}>
+                          {item?.name || item}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, "izin", "description"]}
+                    label="Keterangan"
+                  >
+                    <Form.Item
+                      {...restField}
+                      name={[name, "izin"]}
+                      defaultValue="hadir"
+                    >
+                      <Select>
+                        <Option value="hadir">Hadir</Option>
+                        <Option value="izin">Izin</Option>
+                        <Option value="cuti">Cuti</Option>
+                        <Option value="sakit">Sakit</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item {...restField} name={[name, "description"]}>
+                      <TextArea rows={2} placeholder="Keterangan (Opsional)" />
+                    </Form.Item>
                   </Form.Item>
                   <Form.Item
                     {...restField}
@@ -152,5 +182,6 @@ ModalTimesheet.defaultProps = {
   onCancel: () => {},
   onFinish: () => {},
   companyList: [],
+  workLocationList: [],
 };
 export default ModalTimesheet;

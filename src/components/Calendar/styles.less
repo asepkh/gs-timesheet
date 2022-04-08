@@ -1,0 +1,54 @@
+#calendar {
+  border-collapse: collapse;
+  width: 100%;
+
+  td,
+  th {
+    position: relative;
+    border: 1.5px solid #ddd;
+    padding: 8px;
+    font-weight: 600;
+  }
+
+  th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+  }
+
+  .days {
+    height: 80px;
+    text-align: center;
+  }
+
+  .weekend {
+    color: red;
+  }
+
+  .workday {
+    font-size: 0.8em;
+    b {
+      font-size: 1.2em;
+      color: #005699;
+    }
+  }
+
+  .weekend:hover,
+  .workday:hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+
+  .blank,
+  .blank:hover {
+    cursor: inherit !important;
+    background-color: #ddd !important;
+  }
+
+  .national-holiday {
+    position: absolute;
+    right: -9px;
+    top: 0px;
+    font-size: 6pt;
+  }
+}

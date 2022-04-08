@@ -24,7 +24,11 @@ const Login = () => {
         }, 1000);
       },
       onError: (error) => {
-        message.error(error?.response?.data?.errorMessage || "Login failed");
+        message.error({
+          content: error?.response?.data?.errorMessage || "Login failed",
+          duration: 1,
+          key: "errorLogin",
+        });
         console.log(error?.response?.data?.errorMessage || "Login failed");
       },
     }
@@ -71,9 +75,8 @@ const Login = () => {
               },
             ]}
           >
-            <Input
+            <Input.Password
               prefix={<LockOutlined className="site-form-item-icon" />}
-              type="password"
               placeholder="Password"
             />
           </Form.Item>

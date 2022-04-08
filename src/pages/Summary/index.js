@@ -1,74 +1,99 @@
 import { useState } from "react";
+import moment from "moment";
 import useController from "./controller";
 
-import { Table, Button } from "antd";
-import ModalUser from "@/components/ModalUser";
+import { Table, Row, Select } from "antd";
 
+const { Option } = Select;
 const Summary = () => {
-  const [modal, setModal] = useState({
-      visible: false,
-      title: "Tambah Karyawan",
-      initialValues: { isAdmin: false, gender: "Male" },
-    }),
-    [page, setPage] = useState(1);
-
-  const {
-    userColumn,
-    userData,
-    isLoading,
-    isFetching,
-    totalPages,
-    register,
-    update,
-  } = useController({
-    queries: { page: 1 },
-    setModal,
+  const [custom, setCustom] = useState(false);
+  const [page, setPage] = useState(1);
+  const [date, setDate] = useState({
+    year: moment().format("YYYY"),
+    month: moment().format("M"),
   });
 
-  const onFinish = (values) => {
-    console.log("Success:", values);
+  const dateFormat = date?.year + "-" + date?.month + "-01";
 
-    if (modal?.title === "Tambah Karyawan") register.mutate(values);
-    else update.mutate(values);
-  };
+  const { column, data, isLoading, isFetching, totalPages, res } =
+    useController({
+      queries: { page, date: dateFormat },
+      date,
+    });
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "end", marginBottom: 20 }}>
-        <Button
-          onClick={() =>
-            setModal({
-              title: "Tambah Karyawan",
-              initialValues: { isAdmin: false },
-              visible: true,
-            })
-          }
-          type="primary"
-        >
-          Tambah Karyawan
-        </Button>
-      </div>
-
+      <Row justify="space-between" style={{ marginBottom: 20 }}>
+        <div />
+        <div style={{ display: "flex" }}>
+          <Select
+            style={{ width: 150, marginRight: 10 }}
+            value={custom ? "custom" : moment(dateFormat).format("YYYY-MM")}
+            onChange={(value) => {
+              if (value === "custom") setCustom(true);
+              else {
+                setCustom(false);
+                setDate({
+                  month: moment(value).format("M"),
+                  year: moment(value).format("YYYY"),
+                });
+              }
+            }}
+          >
+            <Option
+              value={moment()
+                .subtract(1, "months")
+                .endOf("month")
+                .format("YYYY-MM")}
+            >
+              Bulan terakhir
+            </Option>
+            <Option value={moment().format("YYYY-MM")}>Bulan ini</Option>
+            <Option value="custom">Pilih Sendiri</Option>
+          </Select>
+          <Select
+            disabled={!custom}
+            style={{ width: 120, marginRight: 10 }}
+            value={date?.month}
+            onChange={(value) => setDate({ ...date, month: value })}
+          >
+            {moment.months().map((month, index) => (
+              <Option value={(index + 1).toString()} key={index}>
+                {month}
+              </Option>
+            ))}
+          </Select>
+          <Select
+            disabled={!custom}
+            value={date?.year}
+            onChange={(value) => setDate({ ...date, year: value })}
+          >
+            <Option
+              value={moment().subtract(1, "year").endOf("year").format("YYYY")}
+            >
+              {moment().subtract(1, "year").endOf("year").format("YYYY")}
+            </Option>
+            <Option value={moment().format("YYYY")}>
+              {moment().format("YYYY")}
+            </Option>
+            <Option
+              value={moment().add(1, "year").endOf("year").format("YYYY")}
+            >
+              {moment().add(1, "year").endOf("year").format("YYYY")}
+            </Option>
+          </Select>
+        </div>
+      </Row>
       <Table
-        columns={userColumn}
-        dataSource={userData}
+        columns={column}
+        dataSource={data}
         loading={isLoading || isFetching}
         pagination={{
           total: totalPages,
           current: page,
           onChange: (currentPage) => setPage(currentPage),
         }}
-      />
-      <ModalUser
-        {...modal}
-        onFinish={onFinish}
-        onCancel={() =>
-          setModal({
-            ...modal,
-            initialValues: { isAdmin: false, gender: "Male" },
-            visible: false,
-          })
-        }
+        bordered
       />
     </>
   );

@@ -48,7 +48,6 @@
 }
 
 .container {
-  font-family: "Poppins", sans-serif;
   min-height: 100vh;
 }
 
@@ -106,4 +105,30 @@
   margin-right: 5px;
   cursor: pointer;
   font-size: 12px;
+}
+
+.profile-picture {
+  position: relative;
+  width: 100%;
+  padding: 0pt 20pt;
+  height: auto;
+
+  img {
+    width: 100%;
+    border: 4px solid @primary-color;
+    border-radius: 100%;
+    margin-bottom: 12pt;
+  }
+}
+
+h4 {
+  &.name {
+    text-align: center;
+    font-weight: 700;
+    margin-bottom: 0;
+  }
+  &.email {
+    text-align: center;
+    color: @primary-color;
+  }
 }

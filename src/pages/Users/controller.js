@@ -29,6 +29,9 @@ const useController = ({ queries, setModal }) => {
     {
       onSuccess: () => {
         message.success("User Added Successfully");
+        setModal({
+          visible: false,
+        });
         refetch();
       },
       onError: (error) => {
@@ -44,6 +47,9 @@ const useController = ({ queries, setModal }) => {
     {
       onSuccess: () => {
         message.success("User Update Successfully");
+        setModal({
+          visible: false,
+        });
         refetch();
       },
       onError: (error) => {

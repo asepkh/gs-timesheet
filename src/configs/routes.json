@@ -7,16 +7,16 @@
     "component": "Home"
   },
   {
+    "path": "/profile",
+    "title": "My Profile",
+    "icon": "UserOutlined",
+    "component": "Profile"
+  },
+  {
     "path": "/timesheet",
     "title": "Timesheet",
     "icon": "CalendarFilled",
     "component": "Timesheet"
-  },
-  {
-    "path": "/biodata",
-    "title": "Biodata",
-    "icon": "UserOutlined",
-    "component": "Biodata"
   },
   {
     "title": "Admin Menu",
@@ -36,9 +36,15 @@
         "component": "Projects"
       },
       {
-        "path": "/admin/summary",
-        "title": "Summary Report",
-        "icon": "FileDoneOutlined",
+        "path": "/admin/work-locations",
+        "title": "Work Locations",
+        "icon": "PushpinOutlined",
+        "component": "WorkLocation"
+      },
+      {
+        "path": "/admin/data-summary",
+        "title": "Data Summary",
+        "icon": "SolutionOutlined",
         "component": "Summary"
       }
     ]

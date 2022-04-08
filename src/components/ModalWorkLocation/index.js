@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Modal, Form, Input } from "antd";
 
-const ModalProject = ({
+const ModalWorkLocation = ({
   visible,
   onCancel,
   title,
@@ -23,7 +23,7 @@ const ModalProject = ({
         onCancel();
       }}
       title={title}
-      okText={title !== "Edit Project" ? "Submit" : "Save"}
+      okText={title !== "Edit Work Location" ? "Submit" : "Save"}
       onOk={() => {
         form
           .validateFields()
@@ -44,21 +44,26 @@ const ModalProject = ({
         onValuesChange={(value) => console.log(value)}
       >
         <Form.Item
-          label="Project Name"
+          label="Place Name"
           name="name"
           required
-          rules={[{ required: true, message: "Project Name harus diisi" }]}
+          rules={[
+            { required: true, message: "Work Location Name harus diisi" },
+          ]}
         >
-          <Input placeholder="E.g. Tokopedia" style={{ width: "100%" }} />
+          <Input
+            placeholder="E.g. Kantor Tanah Tinggi"
+            style={{ width: "100%" }}
+          />
         </Form.Item>
         <Form.Item label="Description" name="description" tooltip="Optional">
           <Input.TextArea
-            placeholder="E.g. Project E-commerce Tokopedia"
+            placeholder="E.g. Kantor Utama"
             style={{ width: "100%" }}
             rows={3}
           />
         </Form.Item>
-        {title === "Edit Project" ? (
+        {title === "Edit Work Location" ? (
           <Form.Item name="id" style={{ display: "none" }}>
             <Input />
           </Form.Item>
@@ -70,4 +75,4 @@ const ModalProject = ({
   );
 };
 
-export default ModalProject;
+export default ModalWorkLocation;
