@@ -47,7 +47,7 @@ const App = () => {
     };
 
     authenticate();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (user.isAuthenticated && !user.isLogin) return <Login />;
 

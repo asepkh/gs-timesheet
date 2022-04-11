@@ -30,7 +30,7 @@ const ModalTimesheet = ({
 
   useEffect(() => {
     if (initialValues) form.setFieldsValue(initialValues);
-  }, [initialValues]);
+  }, [initialValues, form]);
 
   return (
     <Form

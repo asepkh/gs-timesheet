@@ -1,7 +1,7 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import moment from "moment";
 import "./styles.less";
-import { Badge, Tag } from "antd";
+import { /*Badge,*/ Tag } from "antd";
 
 const Calendar = ({ date, data, onClickDay }) => {
   const weekDays = moment.weekdays(),
@@ -66,9 +66,9 @@ const Calendar = ({ date, data, onClickDay }) => {
     })
   );
 
-  useEffect(() => {
-    console.log({ tableData, firstDay, tableRows });
-  }, []);
+  // useEffect(() => {
+  //   console.log({ tableData, firstDay, tableRows });
+  // }, []);
 
   return (
     <table id="calendar">

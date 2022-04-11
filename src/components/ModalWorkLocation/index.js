@@ -13,7 +13,7 @@ const ModalWorkLocation = ({
 
   useEffect(() => {
     if (initialValues) form.setFieldsValue(initialValues);
-  }, [initialValues]);
+  }, [initialValues, form]);
 
   return (
     <Modal

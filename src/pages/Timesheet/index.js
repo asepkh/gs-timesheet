@@ -116,21 +116,27 @@ const Timesheet = () => {
         <div style={{ display: "flex" }}>
           <Select
             style={{ width: 150, marginRight: 10 }}
-            value={custom ? "custom" : date?.month}
+            value={custom ? "custom" : moment(dateFormat).format("YYYY-MM")}
             onChange={(value) => {
               if (value === "custom") setCustom(true);
               else {
                 setCustom(false);
-                setDate({ ...date, month: value });
+                setDate({
+                  month: moment(value).format("M"),
+                  year: moment(value).format("YYYY"),
+                });
               }
             }}
           >
             <Option
-              value={moment().subtract(1, "months").endOf("month").format("M")}
+              value={moment()
+                .subtract(1, "months")
+                .endOf("month")
+                .format("YYYY-MM")}
             >
               Bulan terakhir
             </Option>
-            <Option value={moment().format("M")}>Bulan ini</Option>
+            <Option value={moment().format("YYYY-MM")}>Bulan ini</Option>
             <Option value="custom">Pilih Sendiri</Option>
           </Select>
           <Select
