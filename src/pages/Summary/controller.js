@@ -93,6 +93,7 @@ const useController = ({ queries }) => {
     res?.data?.length > 0
       ? res?.data?.map((d, i) => ({
           ...d,
+          key: i,
           i,
           ...d.timesheets,
           name: d?.firstName + " " + d?.lastName,
@@ -110,6 +111,7 @@ const useController = ({ queries }) => {
         }))
       : [
           {
+            key: 0,
             i: 0,
             name: "-",
             email: "-",

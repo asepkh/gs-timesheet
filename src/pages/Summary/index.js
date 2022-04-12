@@ -119,9 +119,10 @@ const Summary = () => {
         </Row>
       </Row>
       <Table
+        columns={column}
         expandable={{
           expandedRowRender: (record) => (
-            <Row gutter={[10, 10]}>
+            <Row gutter={[10, 10]} key={record}>
               <Col xs={24} md={12}>
                 <List
                   size="small"
@@ -130,11 +131,7 @@ const Summary = () => {
                   dataSource={record?.timesheets?.workLocations}
                   renderItem={(d) => (
                     <List.Item>
-                      <b>
-                        {d?.name}{" "}
-                        {(d?.description && `( ${d?.description} )`) || null}
-                      </b>
-                      : {d?.workHours} Jam
+                      <b>{d?.name} </b>: {d?.workHours} Jam
                     </List.Item>
                   )}
                 />
@@ -146,7 +143,9 @@ const Summary = () => {
                   bordered
                   dataSource={record?.timesheets?.descriptions}
                   renderItem={(d) => (
-                    <List.Item>
+                    <List.Item
+                      className={d?.izin !== "hadir" ? "izin" : "hadir"}
+                    >
                       <b>{moment(d?.date).format("DD MMMM YYYY")}</b>:{" "}
                       {d?.description}
                     </List.Item>
@@ -165,9 +164,9 @@ const Summary = () => {
             // </Fragment>
           ),
           rowExpandable: (record) =>
-            record?.timesheets?.workLocations.length > 0,
+            record?.timesheets?.workLocations.length > 0 ||
+            record?.timesheets?.descriptions?.length > 0,
         }}
-        columns={column}
         dataSource={data}
         loading={isLoading || isFetching}
         pagination={{
