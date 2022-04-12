@@ -125,25 +125,24 @@ const ModalTimesheet = ({
                   </Form.Item>
                   <Form.Item
                     {...restField}
-                    name={[name, "izin", "description"]}
+                    name={[name, "izin"]}
                     label="Keterangan"
                   >
-                    <Form.Item
-                      {...restField}
-                      name={[name, "izin"]}
-                      defaultValue="hadir"
-                    >
-                      <Select>
-                        <Option value="hadir">Hadir</Option>
-                        <Option value="izin">Izin</Option>
-                        <Option value="cuti">Cuti</Option>
-                        <Option value="sakit">Sakit</Option>
-                      </Select>
-                    </Form.Item>
-                    <Form.Item {...restField} name={[name, "description"]}>
-                      <TextArea rows={2} placeholder="Keterangan (Opsional)" />
-                    </Form.Item>
+                    <Select>
+                      <Option value="hadir">Hadir</Option>
+                      <Option value="izin">Izin</Option>
+                      <Option value="cuti">Cuti</Option>
+                      <Option value="sakit">Sakit</Option>
+                    </Select>
                   </Form.Item>
+                  <Form.Item
+                    label=" "
+                    {...restField}
+                    name={[name, "description"]}
+                  >
+                    <TextArea rows={2} placeholder="Keterangan (Opsional)" />
+                  </Form.Item>
+
                   <Form.Item
                     {...restField}
                     name={[name, "date"]}

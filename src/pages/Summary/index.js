@@ -2,7 +2,7 @@ import { useState } from "react";
 import moment from "moment";
 import useController from "./controller";
 
-import { Table, Row, Select, Tag } from "antd";
+import { Table, Row, Select, Tag, List, Col } from "antd";
 
 const tag_list = [
   {
@@ -119,6 +119,54 @@ const Summary = () => {
         </Row>
       </Row>
       <Table
+        expandable={{
+          expandedRowRender: (record) => (
+            <Row gutter={[10, 10]}>
+              <Col xs={24} md={12}>
+                <List
+                  size="small"
+                  header={<h4>Worktime Allocations</h4>}
+                  bordered
+                  dataSource={record?.timesheets?.workLocations}
+                  renderItem={(d) => (
+                    <List.Item>
+                      <b>
+                        {d?.name}{" "}
+                        {(d?.description && `( ${d?.description} )`) || null}
+                      </b>
+                      : {d?.workHours} Jam
+                    </List.Item>
+                  )}
+                />
+              </Col>
+              <Col xs={24} md={12}>
+                <List
+                  size="small"
+                  header={<h4>Keterangan Tertulis</h4>}
+                  bordered
+                  dataSource={record?.timesheets?.descriptions}
+                  renderItem={(d) => (
+                    <List.Item>
+                      <b>{moment(d?.date).format("DD MMMM YYYY")}</b>:{" "}
+                      {d?.description}
+                    </List.Item>
+                  )}
+                />
+              </Col>
+            </Row>
+            // <Fragment>
+            //   <h4>Worktime Allocations</h4>
+            //   {record?.timesheets?.workLocations.map((d, i) => (
+            //     <pre key={i}>
+            //       -{" "}
+
+            //     </pre>
+            //   ))}
+            // </Fragment>
+          ),
+          rowExpandable: (record) =>
+            record?.timesheets?.workLocations.length > 0,
+        }}
         columns={column}
         dataSource={data}
         loading={isLoading || isFetching}

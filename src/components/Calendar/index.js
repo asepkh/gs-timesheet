@@ -2,6 +2,7 @@
 import moment from "moment";
 import "./styles.less";
 import { /*Badge,*/ Tag } from "antd";
+import { Fragment } from "react";
 
 const Calendar = ({ date, data, onClickDay }) => {
   const weekDays = moment.weekdays(),
@@ -54,15 +55,19 @@ const Calendar = ({ date, data, onClickDay }) => {
                 "YYYY-MM-DD"
               )
           ) || [];
-      const tableRowsData = {
+      const tableColumnData = {
         day,
         date: moment(`${moment(date).format("YYYY-MM")}-${day}`).format(
           "YYYY-MM-DD"
         ),
         timesheets: workDatas,
+        izin:
+          workDatas?.includes("izin") !== "hadir"
+            ? workDatas[0]?.izin
+            : "hadir",
         totalWorkHours: sumArrayOfObject(workDatas, "workHours"),
       };
-      return tableRowsData;
+      return tableColumnData;
     })
   );
 
@@ -106,11 +111,16 @@ const Calendar = ({ date, data, onClickDay }) => {
                     {nationalDay(d?.day)}
                   </Tag>
                 ) : (
-                  <></>
+                  <Fragment />
                 )}
                 <b>{d?.day}</b>
-                <br />
-                {d?.day && d?.totalWorkHours ? d?.totalWorkHours + " Jam" : ""}
+                <div className={d?.izin !== "hadir" ? "izin" : "hadir"}>
+                  {d?.izin !== "hadir"
+                    ? d.izin
+                    : d?.totalWorkHours
+                    ? d?.totalWorkHours + " Jam"
+                    : ""}
+                </div>
               </td>
             ))}
             <td>
@@ -124,16 +134,16 @@ const Calendar = ({ date, data, onClickDay }) => {
         <tr>
           <td colSpan="6" style={{ textAlign: "left" }}>
             Keterangan: <br />
-            {data?.timesheets?.map((d) =>
+            {data?.timesheets?.map((d, i) =>
               d?.description || d?.izin !== "hadir" ? (
-                <>
+                <Fragment key={i}>
                   - {moment(d?.date).format("DD MMMM YYYY")}:{" "}
                   {d.izin.charAt(0).toUpperCase() + d.izin.slice(1)} -{" "}
                   {d?.description || "Tanpa Keterangan"}
                   <br />
-                </>
+                </Fragment>
               ) : (
-                <></>
+                <Fragment />
               )
             )}
           </td>
