@@ -1,8 +1,15 @@
 import { useEffect } from "react";
 import { useQuery } from "react-query";
+import moment from "moment";
 
 import { getDataSummary } from "@/services/timesheet";
-import { message } from "antd";
+import { message, Button } from "antd";
+
+import ReactExport from "react-data-export";
+
+const { ExcelFile } = ReactExport,
+  { ExcelSheet } = ExcelFile,
+  { ExcelColumn } = ExcelSheet;
 
 const useController = ({ queries }) => {
   const {
@@ -118,6 +125,265 @@ const useController = ({ queries }) => {
           },
         ];
 
+  const multiDataSet = [
+    {
+      columns: [
+        {
+          title: "No",
+          width: { wch: 3 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        }, //pixels width
+        {
+          title: "Nama",
+          width: { wch: 24 },
+        }, //char width
+        { title: "Role", width: { wch: 20 } },
+        {
+          title: "Hadir",
+          width: { wch: 7 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          title: "Cuti",
+          width: { wch: 6 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          title: "Izin",
+          width: { wch: 6 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          title: "Sakit",
+          width: { wch: 7 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          title: "Total Jam Kerja",
+          width: { wch: 15 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          title: "Total Overtime",
+          width: { wch: 15 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          title: "Keterangan",
+          width: { wch: 40 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          title: "Alokasi Tempat Kerja",
+          width: { wch: 40 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+      ],
+      data: data.map((d, i) => [
+        {
+          value: i + 1,
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          value: d.name,
+          style: {
+            alignment: {
+              vertical: "center",
+            },
+          },
+        },
+        {
+          value: d.role,
+          style: {
+            alignment: {
+              vertical: "center",
+            },
+          },
+        },
+        {
+          value: d.hadir,
+          style: {
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          value: d.cuti,
+          style: {
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          value: d.izin,
+          style: {
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          value: d.sakit,
+          style: {
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          value: d.totalHours,
+          style: {
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          value: `${d.totalOvertime}`,
+          style: {
+            alignment: {
+              vertical: "center",
+              horizontal: "center",
+            },
+          },
+        },
+        {
+          value:
+            d?.timesheets?.descriptions
+              .map(
+                (item, i) =>
+                  `- ${moment(item?.date).format("DD MMMM YYYY")}: ${
+                    item?.description
+                  }`
+              )
+              .join("\n") || "Tidak ada keterangan",
+          style: {
+            alignment: {
+              vertical: "center",
+              wrapText: true,
+            },
+          },
+        },
+        {
+          value:
+            d?.timesheets?.workLocations
+              .map((item, i) => `- ${item?.name}: ${item?.workHours || 0} Jam`)
+              .join("\n") || "Tidak ada alokasi tempat kerja",
+          style: {
+            alignment: {
+              vertical: "center",
+              wrapText: true,
+            },
+          },
+        },
+      ]),
+      // data: [
+      //   [
+      //     { value: "H1", style: { font: { sz: "24", bold: true } } },
+      //     { value: "Bold", style: { font: { bold: true } } },
+      //     {
+      //       value: "Red",
+      //       style: {
+      //         fill: { patternType: "solid", fgColor: { rgb: "FFFF0000" } },
+      //       },
+      //     },
+      //   ],
+      //   [
+      //     { value: "H2", style: { font: { sz: "18", bold: true } } },
+      //     { value: "underline", style: { font: { underline: true } } },
+      //     {
+      //       value: "Blue",
+      //       style: {
+      //         fill: { patternType: "solid", fgColor: { rgb: "FF0000FF" } },
+      //       },
+      //     },
+      //   ],
+      //   [
+      //     { value: "H3", style: { font: { sz: "14", bold: true } } },
+      //     { value: "italic", style: { font: { italic: true } } },
+      //     {
+      //       value: "Green",
+      //       style: {
+      //         fill: { patternType: "solid", fgColor: { rgb: "FF00FF00" } },
+      //       },
+      //     },
+      //   ],
+      //   [
+      //     { value: "H4", style: { font: { sz: "12", bold: true } } },
+      //     { value: "strike", style: { font: { strike: true } } },
+      //     {
+      //       value: "Orange",
+      //       style: {
+      //         fill: { patternType: "solid", fgColor: { rgb: "FFF86B00" } },
+      //       },
+      //     },
+      //   ],
+      //   [
+      //     { value: "H5", style: { font: { sz: "10.5", bold: true } } },
+      //     { value: "outline", style: { font: { outline: true } } },
+      //     {
+      //       value: "Yellow",
+      //       style: {
+      //         fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } },
+      //       },
+      //     },
+      //   ],
+      //   [
+      //     { value: "H6", style: { font: { sz: "7.5", bold: true } } },
+      //     { value: "shadow", style: { font: { shadow: true } } },
+      //     {
+      //       value: "Light Blue",
+      //       style: {
+      //         fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } },
+      //       },
+      //     },
+      //   ],
+      // ],
+    },
+  ];
+
+  const DownloadExcel = () => (
+    <ExcelFile
+      element={
+        <Button
+          disabled={isFetching || isLoading || isError}
+          type="primary"
+          style={{ marginLeft: 10 }}
+        >
+          Download Data
+        </Button>
+      }
+      filename={`Data Summary ${moment(queries?.date).format(
+        "MM-YYYY"
+      )} - ${moment().format("DD-MM-YYYY")}`}
+    >
+      <ExcelSheet dataSet={multiDataSet} name="Timesheet" />
+      <ExcelSheet dataSet={multiDataSet} name="Work Allocations" />
+    </ExcelFile>
+  );
+
   return {
     column,
     data,
@@ -126,6 +392,7 @@ const useController = ({ queries }) => {
     refetch,
     res,
     totalPages: res?.data?.totalPages,
+    DownloadExcel,
   };
 };
 

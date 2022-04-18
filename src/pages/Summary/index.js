@@ -43,11 +43,18 @@ const Summary = () => {
 
   const dateFormat = date?.year + "-" + date?.month + "-01";
 
-  const { column, data, isLoading, isFetching, totalPages, res } =
-    useController({
-      queries: { page, date: dateFormat },
-      date,
-    });
+  const {
+    column,
+    data,
+    isLoading,
+    isFetching,
+    totalPages,
+    res,
+    DownloadExcel,
+  } = useController({
+    queries: { page, date: dateFormat },
+    date,
+  });
 
   return (
     <>
@@ -116,6 +123,7 @@ const Summary = () => {
               {moment().add(1, "year").endOf("year").format("YYYY")}
             </Option>
           </Select>
+          <DownloadExcel />
         </Row>
       </Row>
       <Table
@@ -153,15 +161,6 @@ const Summary = () => {
                 />
               </Col>
             </Row>
-            // <Fragment>
-            //   <h4>Worktime Allocations</h4>
-            //   {record?.timesheets?.workLocations.map((d, i) => (
-            //     <pre key={i}>
-            //       -{" "}
-
-            //     </pre>
-            //   ))}
-            // </Fragment>
           ),
           rowExpandable: (record) =>
             record?.timesheets?.workLocations.length > 0 ||
