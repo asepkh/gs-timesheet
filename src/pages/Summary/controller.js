@@ -8,8 +8,7 @@ import { message, Button } from "antd";
 import ReactExport from "react-data-export";
 
 const { ExcelFile } = ReactExport,
-  { ExcelSheet } = ExcelFile,
-  { ExcelColumn } = ExcelSheet;
+  { ExcelSheet } = ExcelFile;
 
 const useController = ({ queries }) => {
   const {
