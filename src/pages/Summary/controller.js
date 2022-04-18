@@ -189,14 +189,6 @@ const useController = ({ queries }) => {
           },
         },
         {
-          title: "Keterangan",
-          width: { wch: 40 },
-          style: {
-            font: { sz: "12", bold: true },
-            alignment: { vertical: "center", horizontal: "center" },
-          },
-        },
-        {
           title: "Alokasi Tempat Kerja",
           width: { wch: 40 },
           style: {
@@ -270,6 +262,71 @@ const useController = ({ queries }) => {
         },
         {
           value:
+            d?.timesheets?.workLocations
+              .map((item, i) => `- ${item?.name}: ${item?.workHours || 0} Jam`)
+              .join("\n") || "Tidak ada alokasi tempat kerja",
+          style: {
+            alignment: {
+              vertical: "center",
+              wrapText: true,
+            },
+          },
+        },
+      ]),
+    },
+  ];
+
+  const multiDataSet2 = [
+    {
+      columns: [
+        {
+          title: "No",
+          width: { wch: 3 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        }, //pixels width
+        {
+          title: "Nama",
+          width: { wch: 24 },
+        }, //char width
+        { title: "Role", width: { wch: 20 } },
+        {
+          title: "Keterangan",
+          width: { wch: 40 },
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+      ],
+      data: data.map((d, i) => [
+        {
+          value: i + 1,
+          style: {
+            font: { sz: "12", bold: true },
+            alignment: { vertical: "center", horizontal: "center" },
+          },
+        },
+        {
+          value: d.name,
+          style: {
+            alignment: {
+              vertical: "center",
+            },
+          },
+        },
+        {
+          value: d.role,
+          style: {
+            alignment: {
+              vertical: "center",
+            },
+          },
+        },
+        {
+          value:
             d?.timesheets?.descriptions
               .map(
                 (item, i) =>
@@ -285,81 +342,7 @@ const useController = ({ queries }) => {
             },
           },
         },
-        {
-          value:
-            d?.timesheets?.workLocations
-              .map((item, i) => `- ${item?.name}: ${item?.workHours || 0} Jam`)
-              .join("\n") || "Tidak ada alokasi tempat kerja",
-          style: {
-            alignment: {
-              vertical: "center",
-              wrapText: true,
-            },
-          },
-        },
       ]),
-      // data: [
-      //   [
-      //     { value: "H1", style: { font: { sz: "24", bold: true } } },
-      //     { value: "Bold", style: { font: { bold: true } } },
-      //     {
-      //       value: "Red",
-      //       style: {
-      //         fill: { patternType: "solid", fgColor: { rgb: "FFFF0000" } },
-      //       },
-      //     },
-      //   ],
-      //   [
-      //     { value: "H2", style: { font: { sz: "18", bold: true } } },
-      //     { value: "underline", style: { font: { underline: true } } },
-      //     {
-      //       value: "Blue",
-      //       style: {
-      //         fill: { patternType: "solid", fgColor: { rgb: "FF0000FF" } },
-      //       },
-      //     },
-      //   ],
-      //   [
-      //     { value: "H3", style: { font: { sz: "14", bold: true } } },
-      //     { value: "italic", style: { font: { italic: true } } },
-      //     {
-      //       value: "Green",
-      //       style: {
-      //         fill: { patternType: "solid", fgColor: { rgb: "FF00FF00" } },
-      //       },
-      //     },
-      //   ],
-      //   [
-      //     { value: "H4", style: { font: { sz: "12", bold: true } } },
-      //     { value: "strike", style: { font: { strike: true } } },
-      //     {
-      //       value: "Orange",
-      //       style: {
-      //         fill: { patternType: "solid", fgColor: { rgb: "FFF86B00" } },
-      //       },
-      //     },
-      //   ],
-      //   [
-      //     { value: "H5", style: { font: { sz: "10.5", bold: true } } },
-      //     { value: "outline", style: { font: { outline: true } } },
-      //     {
-      //       value: "Yellow",
-      //       style: {
-      //         fill: { patternType: "solid", fgColor: { rgb: "FFFFFF00" } },
-      //       },
-      //     },
-      //   ],
-      //   [
-      //     { value: "H6", style: { font: { sz: "7.5", bold: true } } },
-      //     { value: "shadow", style: { font: { shadow: true } } },
-      //     {
-      //       value: "Light Blue",
-      //       style: {
-      //         fill: { patternType: "solid", fgColor: { rgb: "FFCCEEFF" } },
-      //       },
-      //     },
-      //   ],
-      // ],
     },
   ];
 
@@ -379,7 +362,7 @@ const useController = ({ queries }) => {
       )} - ${moment().format("DD-MM-YYYY")}`}
     >
       <ExcelSheet dataSet={multiDataSet} name="Timesheet" />
-      <ExcelSheet dataSet={multiDataSet} name="Work Allocations" />
+      <ExcelSheet dataSet={multiDataSet2} name="Keterangan" />
     </ExcelFile>
   );
 
