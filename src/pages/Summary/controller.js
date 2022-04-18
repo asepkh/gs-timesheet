@@ -350,7 +350,7 @@ const useController = ({ queries }) => {
     <ExcelFile
       element={
         <Button
-          disabled={isFetching || isLoading || isError}
+          disabled={isFetching || isLoading || isError || !res?.data?.length}
           type="primary"
           style={{ marginLeft: 10 }}
         >
