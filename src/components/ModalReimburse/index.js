@@ -156,6 +156,7 @@ const ModalReimburse = ({ visible, onCancel, title, onFinish, initialValues, ...
         )}
       </Form>
       <Modal
+        centered
         visible={!!preview}
         title="Preview Bukti Pembayaran"
         onCancel={() => setPreview(null)}
