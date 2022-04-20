@@ -19,6 +19,12 @@
     "component": "Timesheet"
   },
   {
+    "path": "/reimbursement",
+    "title": "Reimbursement",
+    "icon": "WalletOutlined",
+    "component": "Reimburse"
+  },
+  {
     "title": "Admin Menu",
     "icon": "SettingFilled",
     "admin": true,

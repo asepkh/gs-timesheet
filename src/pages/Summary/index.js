@@ -41,7 +41,7 @@ const Summary = () => {
     month: moment().format("M"),
   });
 
-  const dateFormat = date?.year + "-" + date?.month + "-01";
+  const dateFormat = date?.year + "-" + date?.month;
 
   const {
     column,
