@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import moment from "moment";
 import { useQuery, useMutation } from "react-query";
 import { getReimburse, removeReimburse, addReimburse } from "@/services/reimburse";
 
@@ -82,6 +83,7 @@ const useController = ({ queries, setModal }) => {
       key: "date",
       dataIndex: "date",
       width: "100pt",
+      render: (value) => moment(value).format("DD-MM-YYYY"),
     },
     {
       title: "Reimburse",
@@ -97,7 +99,6 @@ const useController = ({ queries, setModal }) => {
       render: (value) => value || "-",
       width: "200pt",
     },
-
     {
       title: "Bukti Pembayaran",
       key: "images",

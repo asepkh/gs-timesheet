@@ -52,6 +52,12 @@
         "title": "Data Summary",
         "icon": "SolutionOutlined",
         "component": "Summary"
+      },
+      {
+        "path": "/admin/reimburse-report",
+        "title": "Reimburses Report",
+        "icon": "CreditCardFilled",
+        "component": "ReimburseReport"
       }
     ]
   }

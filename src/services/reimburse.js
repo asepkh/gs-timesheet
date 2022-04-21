@@ -8,7 +8,7 @@ const addReimburse = (payload) => api.post(null, "api/v1/reimburse", null, paylo
       params: queries,
     }),
   getDataSummary = (queries = {}) =>
-    api.get(null, `api/v1/admin/data-summary${queries?.id ? `/${queries?.id}` : ``}`, {
+    api.get(null, `api/v1/admin/reimbursements${queries?.id ? `/${queries?.id}` : ``}`, {
       params: queries,
     });
 
