@@ -43,15 +43,7 @@ const Summary = () => {
 
   const dateFormat = date?.year + "-" + date?.month;
 
-  const {
-    column,
-    data,
-    isLoading,
-    isFetching,
-    totalPages,
-    res,
-    DownloadExcel,
-  } = useController({
+  const { column, data, isLoading, isFetching, totalPages, res, DownloadExcel } = useController({
     queries: { page, date: dateFormat },
     date,
   });
@@ -81,14 +73,7 @@ const Summary = () => {
               }
             }}
           >
-            <Option
-              value={moment()
-                .subtract(1, "months")
-                .endOf("month")
-                .format("YYYY-MM")}
-            >
-              Bulan terakhir
-            </Option>
+            <Option value={moment().subtract(1, "months").endOf("month").format("YYYY-MM")}>Bulan terakhir</Option>
             <Option value={moment().format("YYYY-MM")}>Bulan ini</Option>
             <Option value="custom">Pilih Sendiri</Option>
           </Select>
@@ -104,22 +89,12 @@ const Summary = () => {
               </Option>
             ))}
           </Select>
-          <Select
-            disabled={!custom}
-            value={date?.year}
-            onChange={(value) => setDate({ ...date, year: value })}
-          >
-            <Option
-              value={moment().subtract(1, "year").endOf("year").format("YYYY")}
-            >
+          <Select disabled={!custom} value={date?.year} onChange={(value) => setDate({ ...date, year: value })}>
+            <Option value={moment().subtract(1, "year").endOf("year").format("YYYY")}>
               {moment().subtract(1, "year").endOf("year").format("YYYY")}
             </Option>
-            <Option value={moment().format("YYYY")}>
-              {moment().format("YYYY")}
-            </Option>
-            <Option
-              value={moment().add(1, "year").endOf("year").format("YYYY")}
-            >
+            <Option value={moment().format("YYYY")}>{moment().format("YYYY")}</Option>
+            <Option value={moment().add(1, "year").endOf("year").format("YYYY")}>
               {moment().add(1, "year").endOf("year").format("YYYY")}
             </Option>
           </Select>
@@ -151,11 +126,8 @@ const Summary = () => {
                   bordered
                   dataSource={record?.timesheets?.descriptions}
                   renderItem={(d) => (
-                    <List.Item
-                      className={d?.izin !== "hadir" ? "izin" : "hadir"}
-                    >
-                      <b>{moment(d?.date).format("DD MMMM YYYY")}</b>:{" "}
-                      {d?.description}
+                    <List.Item className={d?.izin !== "hadir" ? "izin" : "hadir"}>
+                      <b>{moment(d?.date).format("DD MMMM YYYY")}</b>: {d?.description}
                     </List.Item>
                   )}
                 />
@@ -163,8 +135,7 @@ const Summary = () => {
             </Row>
           ),
           rowExpandable: (record) =>
-            record?.timesheets?.workLocations.length > 0 ||
-            record?.timesheets?.descriptions?.length > 0,
+            record?.timesheets?.workLocations.length > 0 || record?.timesheets?.descriptions?.length > 0,
         }}
         dataSource={data}
         loading={isLoading || isFetching}
