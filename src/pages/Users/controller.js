@@ -1,11 +1,6 @@
 import { useEffect } from "react";
 import { useQuery, useMutation } from "react-query";
-import {
-  getUser,
-  removeUser,
-  register as addUser,
-  updateUser,
-} from "@/services/user";
+import { getUser, removeUser, register as addUser, updateUser } from "@/services/user";
 import { userStore } from "@/store";
 
 import Icon from "@/helpers/Icon";
@@ -53,9 +48,7 @@ const useController = ({ queries, setModal }) => {
         refetch();
       },
       onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Update User Failed"
-        );
+        message.error(error?.response?.data?.errorMessage || "Update User Failed");
       },
     }
   );
@@ -94,9 +87,7 @@ const useController = ({ queries, setModal }) => {
       key: "profilePic",
       dataIndex: "profilePic",
       align: "center",
-      render: (value) => (
-        <img src={value} className="profile_picture" alt="profile" />
-      ),
+      render: (value) => <img src={value} className="profile_picture" alt="profile" />,
     },
     {
       title: "Name",
@@ -130,15 +121,9 @@ const useController = ({ queries, setModal }) => {
       align: "center",
       render: (value) =>
         value ? (
-          <Icon
-            type="CheckSquareFilled"
-            style={{ color: "#00e600", fontSize: 30 }}
-          />
+          <Icon type="CheckSquareFilled" style={{ color: "#00e600", fontSize: 30 }} />
         ) : (
-          <Icon
-            type="CloseSquareFilled"
-            style={{ color: "red", fontSize: 30 }}
-          />
+          <Icon type="CloseSquareFilled" style={{ color: "red", fontSize: 30 }} />
         ),
     },
     {
@@ -160,11 +145,11 @@ const useController = ({ queries, setModal }) => {
           role: d?.role || "-",
           action: (
             <Row key={i} justify="center">
-              <Tooltip placement="topLeft" title="Timesheet">
+              {/* <Tooltip placement="topLeft" title="Timesheet">
                 <Button className="button-action" type="primary">
                   <Icon type="CalendarFilled" />
                 </Button>
-              </Tooltip>
+              </Tooltip> */}
               <Tooltip placement="topLeft" title="Edit">
                 <Button
                   className="button-action"
@@ -182,12 +167,7 @@ const useController = ({ queries, setModal }) => {
                 </Button>
               </Tooltip>
               {d?.id !== user?.id && (
-                <Popconfirm
-                  title="Are you sure？"
-                  okText="Yes"
-                  cancelText="No"
-                  onConfirm={() => remove.mutate(d?.id)}
-                >
+                <Popconfirm title="Are you sure？" okText="Yes" cancelText="No" onConfirm={() => remove.mutate(d?.id)}>
                   <Tooltip placement="topLeft" title="Remove">
                     <Button className="button-action" type="danger">
                       <Icon type="DeleteFilled" />

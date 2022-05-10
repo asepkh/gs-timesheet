@@ -95,6 +95,9 @@ const useController = ({ queries }) => {
     // },
   ];
 
+  const totalOvertime = (d) =>
+    d?.timesheets?.totalHours -
+    (res?.totalWorkHours - d?.timesheets?.cuti * 8 - d?.timesheets?.sakit * 8 - d?.timesheets?.izin * 8);
   const data =
     res?.data?.length > 0
       ? res?.data?.map((d, i) => ({
@@ -103,7 +106,7 @@ const useController = ({ queries }) => {
           i,
           ...d.timesheets,
           name: d?.firstName + " " + d?.lastName,
-          totalOvertime: d?.timesheets?.totalHours - res?.totalWorkHours,
+          totalOvertime: totalOvertime > 0 ? totalOvertime : 0,
           // keterangan: d?.timesheets?.descriptions?.map((item, index) =>
           //   item?.description ? (
           //     <div className="keterangan" key={index}>
@@ -262,9 +265,8 @@ const useController = ({ queries }) => {
         },
         {
           value:
-            d?.timesheets?.workLocations
-              .map((item, i) => `- ${item?.name}: ${item?.workHours || 0} Jam`)
-              .join("\n") || "Tidak ada alokasi tempat kerja",
+            d?.timesheets?.workLocations.map((item, i) => `- ${item?.name}: ${item?.workHours || 0} Jam`).join("\n") ||
+            "Tidak ada alokasi tempat kerja",
           style: {
             alignment: {
               vertical: "center",
@@ -328,12 +330,7 @@ const useController = ({ queries }) => {
         {
           value:
             d?.timesheets?.descriptions
-              .map(
-                (item, i) =>
-                  `- ${moment(item?.date).format("DD MMMM YYYY")}: ${
-                    item?.description
-                  }`
-              )
+              .map((item, i) => `- ${moment(item?.date).format("DD MMMM YYYY")}: ${item?.description}`)
               .join("\n") || "Tidak ada keterangan",
           style: {
             alignment: {
@@ -357,9 +354,7 @@ const useController = ({ queries }) => {
           Download Data
         </Button>
       }
-      filename={`Data Summary ${moment(queries?.date).format(
-        "MM-YYYY"
-      )} - ${moment().format("DD-MM-YYYY")}`}
+      filename={`Data Summary ${moment(queries?.date).format("MM-YYYY")} - ${moment().format("DD-MM-YYYY")}`}
     >
       <ExcelSheet dataSet={multiDataSet} name="Timesheet" />
       <ExcelSheet dataSet={multiDataSet2} name="Keterangan" />
