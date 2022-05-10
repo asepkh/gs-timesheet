@@ -76,8 +76,8 @@ const useController = ({ queries }) => {
       children: [
         {
           title: "Total",
-          key: "totalHours",
-          dataIndex: "totalHours",
+          key: "totalWorkHours",
+          dataIndex: "totalWorkHours",
           align: "center",
         },
         {
