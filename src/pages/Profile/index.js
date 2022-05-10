@@ -3,10 +3,7 @@ import { useMutation } from "react-query";
 import { Button, Card, Row, Col, Form, Input, Radio, message } from "antd";
 import { userStore } from "@/store";
 import ModalPassword from "@/components/ModalPassword";
-import {
-  updateProfile,
-  changePassword as changePasswordApi,
-} from "@/services/user";
+import { updateProfile, changePassword as changePasswordApi } from "@/services/user";
 
 const Profile = () => {
   const [user] = userStore.use(),
@@ -26,9 +23,7 @@ const Profile = () => {
         user?.refetch();
       },
       onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Update User Failed"
-        );
+        message.error(error?.response?.data?.errorMessage || "Update User Failed");
       },
     }
   );
@@ -40,13 +35,10 @@ const Profile = () => {
     {
       onSuccess: () => {
         message.success("Password Changed!");
-        user?.refetch();
         setVisible(false);
       },
       onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Password Failed To Change"
-        );
+        message.error(error?.response?.data?.errorMessage || "Password Failed To Change");
       },
     }
   );
@@ -116,9 +108,7 @@ const Profile = () => {
                   label="First Name"
                   name="firstName"
                   required
-                  rules={[
-                    { required: true, message: "First Name harus diisi" },
-                  ]}
+                  rules={[{ required: true, message: "First Name harus diisi" }]}
                 >
                   <Input placeholder="E.g. John" style={{ width: "100%" }} />
                 </Form.Item>
@@ -135,11 +125,7 @@ const Profile = () => {
               </Col>
 
               <Col sm={24} md={12}>
-                <Form.Item
-                  name="profilePic"
-                  label="Profile Picture"
-                  tooltip="Optional"
-                >
+                <Form.Item name="profilePic" label="Profile Picture" tooltip="Optional">
                   <Input placeholder="E.g. http://www.fileurl.com/image.jpg" />
                 </Form.Item>
               </Col>
