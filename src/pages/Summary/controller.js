@@ -95,9 +95,6 @@ const useController = ({ queries }) => {
     // },
   ];
 
-  const totalOvertime = (d) =>
-    d?.timesheets?.totalHours -
-    (res?.totalWorkHours - d?.timesheets?.cuti * 8 - d?.timesheets?.sakit * 8 - d?.timesheets?.izin * 8);
   const data =
     res?.data?.length > 0
       ? res?.data?.map((d, i) => ({
@@ -106,7 +103,6 @@ const useController = ({ queries }) => {
           i,
           ...d.timesheets,
           name: d?.firstName + " " + d?.lastName,
-          totalOvertime: totalOvertime > 0 ? totalOvertime : 0,
           // keterangan: d?.timesheets?.descriptions?.map((item, index) =>
           //   item?.description ? (
           //     <div className="keterangan" key={index}>
@@ -249,13 +245,13 @@ const useController = ({ queries }) => {
           },
         },
         {
-          value: d.totalHours,
+          value: d.totalWorkHours,
           style: {
             alignment: { vertical: "center", horizontal: "center" },
           },
         },
         {
-          value: `${d.totalOvertime}`,
+          value: d.totalOvertime,
           style: {
             alignment: {
               vertical: "center",
