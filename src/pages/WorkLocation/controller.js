@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
 import {
   getWorkLocation,
@@ -10,14 +10,22 @@ import {
 import Icon from "@/helpers/Icon";
 import { Button, message, Popconfirm, Row, Tooltip } from "antd";
 
-const useController = ({ queries, setModal }) => {
+const useController = () => {
+  const [modal, setModal] = useState({
+      initialValues: {},
+      title: "Tambah Work Location",
+      visible: false,
+    }),
+    [queries, setQuery] = useState({ page: 1 }),
+    setQueries = (params) => setQuery({ ...queries, ...params });
+
   const {
     data: res,
     isLoading,
     isError,
     error,
     refetch,
-  } = useQuery(["workLocation", queries], () => getWorkLocation({ page: 1 }));
+  } = useQuery(["workLocation", queries], () => getWorkLocation(queries));
 
   const add = useMutation(
     (values) => {
@@ -30,9 +38,7 @@ const useController = ({ queries, setModal }) => {
         refetch();
       },
       onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Add Work Location Failed"
-        );
+        message.error(error?.response?.data?.errorMessage || "Add Work Location Failed");
       },
     }
   );
@@ -67,6 +73,12 @@ const useController = ({ queries, setModal }) => {
       },
     }
   );
+
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    if (modal.title === "Tambah Work Location") add.mutate(values);
+    else update.mutate(values);
+  };
 
   useEffect(() => {
     if (!isError) return;
@@ -155,14 +167,12 @@ const useController = ({ queries, setModal }) => {
     data,
     isLoading,
     totalPages: res?.data?.totalPages,
-    add,
-    update,
+    onFinish,
+    modal,
+    setModal,
+    queries,
+    setQueries,
   };
-};
-
-useController.defaultProps = {
-  queries: { page: 1 },
-  setModal: () => {},
 };
 
 export default useController;

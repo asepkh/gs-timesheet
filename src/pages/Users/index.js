@@ -1,37 +1,21 @@
-import { useState } from "react";
 import useController from "./controller";
 
 import { Table, Button } from "antd";
 import ModalUser from "@/components/ModalUser";
 
 const Users = () => {
-  const [modal, setModal] = useState({
-      visible: false,
-      title: "Tambah Karyawan",
-      initialValues: { isAdmin: false, gender: "Male" },
-    }),
-    [page, setPage] = useState(1);
-
   const {
     userColumn,
     userData,
     isLoading,
     isFetching,
     totalPages,
-    register,
-    update,
-  } = useController({
-    queries: { page },
+    onFinish,
+    queries,
+    setQueries,
     modal,
-    setModal: (value) => setModal({ ...modal, ...value }),
-  });
-
-  const onFinish = (values) => {
-    console.log("Success:", values);
-
-    if (modal?.title === "Tambah Karyawan") register.mutate(values);
-    else update.mutate(values);
-  };
+    setModal,
+  } = useController();
 
   return (
     <>
@@ -56,8 +40,8 @@ const Users = () => {
         loading={isLoading || isFetching}
         pagination={{
           total: totalPages,
-          current: page,
-          onChange: (currentPage) => setPage(currentPage),
+          current: queries.page,
+          onChange: (page) => setQueries({ page }),
         }}
       />
       <ModalUser

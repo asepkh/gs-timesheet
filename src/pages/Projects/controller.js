@@ -1,16 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
-import {
-  getProject,
-  removeProject,
-  addProject,
-  updateProject,
-} from "@/services/project";
+import { getProject, removeProject, addProject, updateProject } from "@/services/project";
 
 import Icon from "@/helpers/Icon";
 import { Button, message, Popconfirm, Row, Tooltip } from "antd";
 
-const useController = ({ queries, setModal }) => {
+const useController = () => {
+  const [modal, setModal] = useState({
+      initialValues: {},
+      title: "Tambah Project",
+      visible: false,
+    }),
+    [queries, setQuery] = useState({ page: 1 }),
+    setQueries = (params) => setQuery({ ...queries, ...params });
+
   const {
     data: res,
     isLoading,
@@ -30,9 +33,7 @@ const useController = ({ queries, setModal }) => {
         refetch();
       },
       onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Add Project Failed"
-        );
+        message.error(error?.response?.data?.errorMessage || "Add Project Failed");
       },
     }
   );
@@ -67,6 +68,12 @@ const useController = ({ queries, setModal }) => {
       },
     }
   );
+
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    if (modal.title === "Tambah Project") add.mutate(values);
+    else update.mutate(values);
+  };
 
   useEffect(() => {
     if (!isError) return;
@@ -155,14 +162,12 @@ const useController = ({ queries, setModal }) => {
     data,
     isLoading,
     totalPages: res?.data?.totalPages,
-    add,
-    update,
+    onFinish,
+    modal,
+    setModal,
+    queries,
+    setQueries,
   };
-};
-
-useController.defaultProps = {
-  queries: { page: 1 },
-  setModal: () => {},
 };
 
 export default useController;

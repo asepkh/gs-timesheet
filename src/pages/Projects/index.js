@@ -1,26 +1,11 @@
-import { useState } from "react";
 import useController from "./controller";
 
 import { Table, Button } from "antd";
 import ModalProject from "@/components/ModalProject";
 
 const Projects = () => {
-  const [modal, setModal] = useState({
-      initialValues: {},
-      title: "Tambah Project",
-      visible: false,
-    }),
-    [page, setPage] = useState(1);
-  const { column, data, isLoading, totalPages, add, update } = useController({
-    queries: { page: 1 },
-    setModal: (values) => setModal({ ...modal, ...values }),
-  });
-
-  const onFinish = (values) => {
-    console.log("Success:", values);
-    if (modal.title === "Tambah Project") add.mutate(values);
-    else update.mutate(values);
-  };
+  const { column, data, isLoading, totalPages, onFinish, modal, setModal, queries, setQueries } =
+    useController();
 
   return (
     <>
@@ -45,8 +30,8 @@ const Projects = () => {
         loading={isLoading}
         pagination={{
           total: totalPages,
-          current: page,
-          onChange: (currentPage) => setPage(currentPage),
+          current: queries.page,
+          onChange: (page) => setQueries({ page }),
         }}
       />
 

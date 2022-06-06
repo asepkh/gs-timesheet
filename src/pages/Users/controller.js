@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery, useMutation } from "react-query";
 import { getUser, removeUser, register as addUser, updateUser } from "@/services/user";
 import { userStore } from "@/store";
@@ -6,7 +6,16 @@ import { userStore } from "@/store";
 import Icon from "@/helpers/Icon";
 import { Button, message, Popconfirm, Row, Tooltip } from "antd";
 
-const useController = ({ queries, setModal }) => {
+const useController = () => {
+  const user = userStore.useValue(),
+    [modal, setModal] = useState({
+      visible: false,
+      title: "Tambah Karyawan",
+      initialValues: { isAdmin: false, gender: "Male" },
+    }),
+    [queries, setQuery] = useState({ page: 1, limit: 10 }),
+    setQueries = (params) => setQuery({ ...queries, ...params });
+
   const {
     data: res,
     isLoading,
@@ -14,8 +23,7 @@ const useController = ({ queries, setModal }) => {
     isError,
     error,
     refetch,
-  } = useQuery(["user", queries], () => getUser({ page: 1 }));
-  const user = userStore.useValue();
+  } = useQuery(["user", queries], () => getUser(queries));
 
   const register = useMutation(
     (values) => {
@@ -67,6 +75,13 @@ const useController = ({ queries, setModal }) => {
       },
     }
   );
+
+  const onFinish = (values) => {
+    console.log("Success:", values);
+
+    if (modal?.title === "Tambah Karyawan") register.mutate(values);
+    else update.mutate(values);
+  };
 
   useEffect(() => {
     if (!isError) return;
@@ -167,7 +182,12 @@ const useController = ({ queries, setModal }) => {
                 </Button>
               </Tooltip>
               {d?.id !== user?.id && (
-                <Popconfirm title="Are you sure？" okText="Yes" cancelText="No" onConfirm={() => remove.mutate(d?.id)}>
+                <Popconfirm
+                  title="Are you sure？"
+                  okText="Yes"
+                  cancelText="No"
+                  onConfirm={() => remove.mutate(d?.id)}
+                >
                   <Tooltip placement="topLeft" title="Remove">
                     <Button className="button-action" type="danger">
                       <Icon type="DeleteFilled" />
@@ -196,8 +216,11 @@ const useController = ({ queries, setModal }) => {
     isLoading,
     isFetching,
     totalPages: res?.data?.totalPages,
-    register,
-    update,
+    onFinish,
+    queries,
+    setQueries,
+    modal,
+    setModal,
   };
 };
 
