@@ -12,8 +12,6 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import Content from "@/components/Content";
 
-
-//Tes contributor commit
 const App = () => {
   const [user, setUser] = userStore.use();
   const [collapsed, setCollapsed] = useState(false);

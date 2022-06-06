@@ -1,20 +1,35 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import { useQuery, useMutation } from "react-query";
-import { getReimburse, removeReimburse, addReimburse } from "@/services/reimburse";
+import {
+  getReimburse,
+  removeReimburse,
+  addReimburse,
+} from "@/services/reimburse";
 
 import Icon from "@/helpers/Icon";
 import { Button, Image, message, Popconfirm, Row, Tooltip } from "antd";
 import { updateReimburse } from "../../services/reimburse";
 
-const useController = ({ queries, setModal }) => {
+const useController = () => {
+  const [modal, setModal] = useState({
+      initialValues: {},
+      title: "Buat Laporan Reimburse",
+      visible: false,
+    }),
+    [queries, setQuery] = useState({
+      page: 1,
+      limit: 10,
+    }),
+    setQueries = (params) => setQuery({ ...queries, ...params });
+
   const {
     data: res,
     isLoading,
     isError,
     error,
     refetch,
-  } = useQuery(["reimburse", queries], () => getReimburse({ page: 1, limit: 10 }));
+  } = useQuery(["reimburse", queries], () => getReimburse(queries));
 
   const add = useMutation(
     (values) => {
@@ -27,7 +42,9 @@ const useController = ({ queries, setModal }) => {
         refetch();
       },
       onError: (error) => {
-        message.error(error?.response?.data?.errorMessage || "Add Reimburse Failed");
+        message.error(
+          error?.response?.data?.errorMessage || "Add Reimburse Failed"
+        );
       },
     }
   );
@@ -43,7 +60,9 @@ const useController = ({ queries, setModal }) => {
         refetch();
       },
       onError: (error) => {
-        message.error(error?.response?.data?.errorMessage || "Update Reimburse Failed");
+        message.error(
+          error?.response?.data?.errorMessage || "Update Reimburse Failed"
+        );
       },
     }
   );
@@ -83,13 +102,14 @@ const useController = ({ queries, setModal }) => {
       key: "date",
       dataIndex: "date",
       width: "100pt",
-      render: (value) => moment(value).format("DD-MM-YYYY"),
+      render: (value) => (!value ? "-" : moment(value).format("DD-MM-YYYY")),
     },
     {
       title: "Reimburse",
       key: "value",
       dataIndex: "value",
-      render: (value) => (value ? `Rp. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "-"),
+      render: (value) =>
+        value ? `Rp. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "-",
       width: "140pt",
     },
     {
@@ -170,19 +190,23 @@ const useController = ({ queries, setModal }) => {
           },
         ];
 
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    if (values?.id) update.mutate(values);
+    else add.mutate(values);
+  };
+
   return {
     column,
     data,
     isLoading,
     totalPages: res?.data?.totalPages,
-    add,
-    update,
+    onFinish,
+    queries,
+    setQueries,
+    modal,
+    setModal,
   };
-};
-
-useController.defaultProps = {
-  queries: { page: 1 },
-  setModal: () => {},
 };
 
 export default useController;

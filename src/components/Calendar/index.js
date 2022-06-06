@@ -81,7 +81,9 @@ const Calendar = ({ date, data, onClickDay }) => {
         <tr>
           <th colSpan="7">Jam Kerja</th>
           <th colSpan="1" rowSpan="2" style={{ maxWidth: 80 }}>
-            Total Jam Kerja Mingguan
+            Total Jam Kerja
+            <br />
+            Mingguan
           </th>
         </tr>
         <tr>

@@ -1,27 +1,20 @@
-import { useState } from "react";
 import useController from "./controller";
 
 import { Table, Button } from "antd";
 import ModalReimburse from "@/components/ModalReimburse";
 
 const Reimburse = () => {
-  const [modal, setModal] = useState({
-      initialValues: {},
-      title: "Buat Laporan Reimburse",
-      visible: false,
-    }),
-    [page, setPage] = useState(1);
-
-  const { column, data, isLoading, totalPages, add, update } = useController({
-    queries: { page: 1 },
-    setModal: (values) => setModal({ ...modal, ...values }),
-  });
-
-  const onFinish = (values) => {
-    console.log("Success:", values);
-    if (values?.id) update.mutate(values);
-    else add.mutate(values);
-  };
+  const {
+    column,
+    data,
+    isLoading,
+    totalPages,
+    modal,
+    setModal,
+    queries,
+    setQueries,
+    onFinish,
+  } = useController();
 
   return (
     <>
@@ -46,8 +39,8 @@ const Reimburse = () => {
         loading={isLoading}
         pagination={{
           total: totalPages,
-          current: page,
-          onChange: (currentPage) => setPage(currentPage),
+          current: queries.page,
+          onChange: (currentPage) => setQueries({ page: currentPage }),
         }}
       />
 
