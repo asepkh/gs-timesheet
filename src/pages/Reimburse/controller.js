@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 import moment from "moment";
 import { useQuery, useMutation } from "react-query";
-import {
-  getReimburse,
-  removeReimburse,
-  addReimburse,
-} from "@/services/reimburse";
+import { getReimburse, removeReimburse, addReimburse } from "@/services/reimburse";
 
 import Icon from "@/helpers/Icon";
 import { Button, Image, message, Popconfirm, Row, Tooltip } from "antd";
@@ -42,9 +38,7 @@ const useController = () => {
         refetch();
       },
       onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Add Reimburse Failed"
-        );
+        message.error(error?.response?.data?.errorMessage || "Add Reimburse Failed");
       },
     }
   );
@@ -60,9 +54,7 @@ const useController = () => {
         refetch();
       },
       onError: (error) => {
-        message.error(
-          error?.response?.data?.errorMessage || "Update Reimburse Failed"
-        );
+        message.error(error?.response?.data?.errorMessage || "Update Reimburse Failed");
       },
     }
   );
@@ -86,7 +78,7 @@ const useController = () => {
     if (!isError) return;
 
     message.error(error);
-  }, [isError, error]);
+  }, [isError, error, res]);
 
   const column = [
     {
@@ -108,8 +100,7 @@ const useController = () => {
       title: "Reimburse",
       key: "value",
       dataIndex: "value",
-      render: (value) =>
-        value ? `Rp. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "-",
+      render: (value) => (value ? `Rp. ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : "-"),
       width: "140pt",
     },
     {
@@ -200,12 +191,12 @@ const useController = () => {
     column,
     data,
     isLoading,
-    totalPages: res?.data?.totalPages,
     onFinish,
     queries,
     setQueries,
     modal,
     setModal,
+    totalPages: res?.totalPages,
   };
 };
 

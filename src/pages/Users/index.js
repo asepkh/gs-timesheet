@@ -39,7 +39,7 @@ const Users = () => {
         dataSource={userData}
         loading={isLoading || isFetching}
         pagination={{
-          total: totalPages,
+          total: totalPages * queries.limit,
           current: queries.page,
           onChange: (page) => setQueries({ page }),
         }}

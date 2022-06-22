@@ -4,17 +4,8 @@ import { Table, Button } from "antd";
 import ModalReimburse from "@/components/ModalReimburse";
 
 const Reimburse = () => {
-  const {
-    column,
-    data,
-    isLoading,
-    totalPages,
-    modal,
-    setModal,
-    queries,
-    setQueries,
-    onFinish,
-  } = useController();
+  const { column, data, isLoading, totalPages, modal, setModal, queries, setQueries, onFinish } =
+    useController();
 
   return (
     <>
@@ -37,9 +28,9 @@ const Reimburse = () => {
         columns={column}
         dataSource={data}
         loading={isLoading}
+        // total={2}
         pagination={{
-          total: totalPages,
-          current: queries.page,
+          total: totalPages * queries.limit,
           onChange: (currentPage) => setQueries({ page: currentPage }),
         }}
       />
