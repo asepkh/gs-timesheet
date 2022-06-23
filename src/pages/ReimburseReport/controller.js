@@ -16,6 +16,7 @@ const useController = () => {
       limit: 10,
       year: moment().format("YYYY"),
       month: moment().format("M"),
+      custom: false,
     }),
     setQueries = (params) => setQuery({ ...queries, ...params }),
     {
@@ -25,7 +26,9 @@ const useController = () => {
       isError,
       error,
       refetch,
-    } = useQuery(["reimburseReportsAll", queries], () => getDataSummary(queries));
+    } = useQuery(["reimburseReportsAll", queries], () =>
+      getDataSummary({ ...queries, date: queries?.year + "-" + queries?.month })
+    );
 
   useEffect(() => {
     if (!isError) return;

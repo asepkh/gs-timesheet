@@ -26,7 +26,9 @@ const useController = () => {
       isError,
       error,
       refetch,
-    } = useQuery(["dataSummaryAll", queries], () => getDataSummary(queries));
+    } = useQuery(["dataSummaryAll", queries], () =>
+      getDataSummary({ ...queries, date: queries?.year + "-" + queries?.month })
+    );
 
   useEffect(() => {
     if (!isError) return;

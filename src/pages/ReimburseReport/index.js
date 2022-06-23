@@ -26,7 +26,17 @@ const Summary = () => {
           <Select
             style={{ width: 150, marginRight: 10 }}
             value={queries?.custom ? "custom" : moment(dateFormat).format("YYYY-MM")}
-            onChange={(value) => setQueries({ custom: value === "custom" || false })}
+            onChange={(value) =>
+              setQueries(
+                value === "custom"
+                  ? { custom: true }
+                  : {
+                      custom: false,
+                      month: moment(value).format("M"),
+                      year: moment(value).format("YYYY"),
+                    }
+              )
+            }
           >
             <Option value={moment().subtract(1, "months").endOf("month").format("YYYY-MM")}>
               Bulan terakhir
