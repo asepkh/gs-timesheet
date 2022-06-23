@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import moment from "moment";
 
@@ -10,15 +10,23 @@ import ReactExport from "react-data-export";
 const { ExcelFile } = ReactExport,
   { ExcelSheet } = ExcelFile;
 
-const useController = ({ queries }) => {
-  const {
-    data: res,
-    isLoading,
-    isFetching,
-    isError,
-    error,
-    refetch,
-  } = useQuery(["dataSummaryAll", queries], () => getDataSummary(queries));
+const useController = () => {
+  const [queries, setQuery] = useState({
+      page: 1,
+      limit: 10,
+      year: moment().format("YYYY"),
+      month: moment().format("M"),
+      custom: false,
+    }),
+    setQueries = (params) => setQuery({ ...queries, ...params }),
+    {
+      data: res,
+      isLoading,
+      isFetching,
+      isError,
+      error,
+      refetch,
+    } = useQuery(["dataSummaryAll", queries], () => getDataSummary(queries));
 
   useEffect(() => {
     if (!isError) return;
@@ -261,8 +269,9 @@ const useController = ({ queries }) => {
         },
         {
           value:
-            d?.timesheets?.workLocations.map((item, i) => `- ${item?.name}: ${item?.workHours || 0} Jam`).join("\n") ||
-            "Tidak ada alokasi tempat kerja",
+            d?.timesheets?.workLocations
+              .map((item, i) => `- ${item?.name}: ${item?.workHours || 0} Jam`)
+              .join("\n") || "Tidak ada alokasi tempat kerja",
           style: {
             alignment: {
               vertical: "center",
@@ -326,7 +335,9 @@ const useController = ({ queries }) => {
         {
           value:
             d?.timesheets?.descriptions
-              .map((item, i) => `- ${moment(item?.date).format("DD MMMM YYYY")}: ${item?.description}`)
+              .map(
+                (item, i) => `- ${moment(item?.date).format("DD MMMM YYYY")}: ${item?.description}`
+              )
               .join("\n") || "Tidak ada keterangan",
           style: {
             alignment: {
@@ -350,7 +361,9 @@ const useController = ({ queries }) => {
           Download Data
         </Button>
       }
-      filename={`Data Summary ${moment(queries?.date).format("MM-YYYY")} - ${moment().format("DD-MM-YYYY")}`}
+      filename={`Data Summary ${moment(queries?.date).format("MM-YYYY")} - ${moment().format(
+        "DD-MM-YYYY"
+      )}`}
     >
       <ExcelSheet dataSet={multiDataSet} name="Timesheet" />
       <ExcelSheet dataSet={multiDataSet2} name="Keterangan" />
@@ -364,6 +377,8 @@ const useController = ({ queries }) => {
     isFetching,
     refetch,
     res,
+    queries,
+    setQueries,
     totalPages: res?.data?.totalPages,
     DownloadExcel,
   };

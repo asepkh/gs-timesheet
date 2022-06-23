@@ -29,7 +29,7 @@ const Projects = () => {
         dataSource={data}
         loading={isLoading}
         pagination={{
-          total: totalPages,
+          total: totalPages * queries.limit,
           current: queries.page,
           onChange: (page) => setQueries({ page }),
         }}

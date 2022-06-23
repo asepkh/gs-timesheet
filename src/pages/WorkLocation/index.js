@@ -5,10 +5,7 @@ import ModalWorkLocation from "@/components/ModalWorkLocation";
 
 const WorkLocation = () => {
   const { column, data, isLoading, totalPages, onFinish, modal, setModal, queries, setQueries } =
-    useController({
-      queries: { page: 1 },
-      setModal: (values) => setModal({ ...modal, ...values }),
-    });
+    useController();
 
   return (
     <>
@@ -32,7 +29,7 @@ const WorkLocation = () => {
         dataSource={data}
         loading={isLoading}
         pagination={{
-          total: totalPages,
+          total: totalPages * queries.limit,
           current: queries.page,
           onChange: (page) => setQueries({ page }),
         }}

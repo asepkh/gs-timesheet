@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import moment from "moment";
 
@@ -10,15 +10,22 @@ import ReactExport from "react-data-export";
 const { ExcelFile } = ReactExport,
   { ExcelSheet } = ExcelFile;
 
-const useController = ({ queries }) => {
-  const {
-    data: res,
-    isLoading,
-    isFetching,
-    isError,
-    error,
-    refetch,
-  } = useQuery(["reimburseReportsAll", queries], () => getDataSummary(queries));
+const useController = () => {
+  const [queries, setQuery] = useState({
+      page: 1,
+      limit: 10,
+      year: moment().format("YYYY"),
+      month: moment().format("M"),
+    }),
+    setQueries = (params) => setQuery({ ...queries, ...params }),
+    {
+      data: res,
+      isLoading,
+      isFetching,
+      isError,
+      error,
+      refetch,
+    } = useQuery(["reimburseReportsAll", queries], () => getDataSummary(queries));
 
   useEffect(() => {
     if (!isError) return;
@@ -294,17 +301,15 @@ const useController = ({ queries }) => {
   return {
     column,
     column_expandable,
+    queries,
+    setQueries,
     data,
     isLoading,
     isFetching,
     refetch,
-    totalPages: res?.data?.totalPages,
+    totalPages: res?.totalPages,
     DownloadExcel,
   };
-};
-
-useController.defaultProps = {
-  page: 1,
 };
 
 export default useController;

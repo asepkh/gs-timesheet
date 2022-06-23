@@ -16,7 +16,7 @@ const useController = () => {
       title: "Tambah Work Location",
       visible: false,
     }),
-    [queries, setQuery] = useState({ page: 1 }),
+    [queries, setQuery] = useState({ page: 1, limit: 10 }),
     setQueries = (params) => setQuery({ ...queries, ...params });
 
   const {
@@ -166,7 +166,7 @@ const useController = () => {
     column,
     data,
     isLoading,
-    totalPages: res?.data?.totalPages,
+    totalPages: res?.totalPages,
     onFinish,
     modal,
     setModal,

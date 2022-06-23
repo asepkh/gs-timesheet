@@ -215,7 +215,7 @@ const useController = () => {
     userData,
     isLoading,
     isFetching,
-    totalPages: res?.data?.totalPages,
+    totalPages: res?.totalPages,
     onFinish,
     queries,
     setQueries,
