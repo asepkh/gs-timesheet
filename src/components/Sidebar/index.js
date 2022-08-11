@@ -1,6 +1,6 @@
-import { Fragment } from "react";
 import { Layout, Menu } from "antd";
 import { Link, useLocation } from "react-router-dom";
+import { useWindowWidth } from "@react-hook/window-size";
 
 import RoutesConfig from "@/configs/routes";
 import Icon from "@/helpers/Icon";
@@ -9,9 +9,17 @@ const { Sider } = Layout,
   { SubMenu } = Menu;
 
 const Sidebar = ({ isAdmin, ...props }) => {
-  const location = useLocation();
+  const location = useLocation(),
+    width = useWindowWidth();
   return (
-    <Sider breakpoint="lg" trigger={null} collapsible width="250" {...props}>
+    <Sider
+      breakpoint="lg"
+      trigger={null}
+      collapsible
+      width={width <= 1024 ? "0" : "250"}
+      style={{ display: width <= 1024 ? (!props?.collapsed ? "none" : "block") : "block" }}
+      {...props}
+    >
       <div className="logo">{!props?.collapsed ? `GUDANG SOLUSI GROUP` : `GSG`}</div>
       <Menu theme="dark" mode="inline" defaultSelectedKeys={[location?.pathname]}>
         {RoutesConfig.map((route) => {

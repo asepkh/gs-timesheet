@@ -37,6 +37,7 @@
     margin: 30px 16px;
     padding: 0px 10px;
     min-height: 400px;
+
     .ant-card-head {
       border-bottom: 1px solid #ddd;
     }
@@ -148,4 +149,25 @@ h4 {
   &.izin {
     color: red;
   }
+}
+
+.custom-scrollbar {
+}
+&::-webkit-scrollbar {
+  height: 8px;
+}
+
+/* Track */
+&::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+&::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+&::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
