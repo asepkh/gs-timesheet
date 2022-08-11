@@ -84,6 +84,7 @@ const useController = () => {
     {
       title: "#",
       key: "i",
+      fixed: "left",
       dataIndex: "i",
       align: "center",
       render: (value) => value + 1,
@@ -193,6 +194,8 @@ const useController = () => {
     isLoading,
     onFinish,
     queries,
+    add,
+    update,
     setQueries,
     modal,
     setModal,

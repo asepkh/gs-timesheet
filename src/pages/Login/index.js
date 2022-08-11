@@ -35,14 +35,8 @@ const Login = () => {
   );
 
   return (
-    <div
-      style={{ display: "flex", justifyContent: "center", paddingTop: "5rem" }}
-    >
-      <Card
-        title="Login Gudang Solusi Timesheet"
-        bordered={false}
-        style={{ width: 500 }}
-      >
+    <div style={{ display: "flex", justifyContent: "center", paddingTop: "5rem" }}>
+      <Card title="Login Gudang Solusi Timesheet" bordered={false} style={{ width: 500 }}>
         <Form
           form={form}
           name="login"
@@ -61,10 +55,7 @@ const Login = () => {
               },
             ]}
           >
-            <Input
-              prefix={<UserOutlined className="site-form-item-icon" />}
-              placeholder="E-mail"
-            />
+            <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="E-mail" />
           </Form.Item>
           <Form.Item
             name="password"
@@ -91,6 +82,7 @@ const Login = () => {
               type="primary"
               htmlType="submit"
               loading={mutation.isLoading}
+              disabled={mutation.isLoading}
               className="login-form-button"
             >
               Log in

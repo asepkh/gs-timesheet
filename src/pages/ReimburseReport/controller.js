@@ -16,7 +16,6 @@ const useController = () => {
       limit: 10,
       year: moment().format("YYYY"),
       month: moment().format("M"),
-      custom: false,
     }),
     setQueries = (params) => setQuery({ ...queries, ...params }),
     {
@@ -40,6 +39,7 @@ const useController = () => {
     {
       title: "#",
       key: "i",
+      fixed: "left",
       dataIndex: "i",
       align: "center",
       render: (value) => value + 1,

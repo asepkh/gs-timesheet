@@ -86,6 +86,7 @@ const Summary = () => {
           rowExpandable: (record) => record?.reimbursements?.length > 0,
         }}
         dataSource={data}
+        scroll={{ x: 1200 }}
         loading={isLoading || isFetching}
         pagination={{
           total: totalPages * queries?.limit,

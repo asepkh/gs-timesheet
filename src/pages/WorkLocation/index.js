@@ -27,6 +27,7 @@ const WorkLocation = () => {
       <Table
         columns={column}
         dataSource={data}
+        scroll={{ x: 1200 }}
         loading={isLoading}
         pagination={{
           total: totalPages * queries.limit,

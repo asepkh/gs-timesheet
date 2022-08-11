@@ -38,6 +38,7 @@ const Users = () => {
         columns={userColumn}
         dataSource={userData}
         loading={isLoading || isFetching}
+        scroll={{ x: 1200 }}
         pagination={{
           total: totalPages * queries.limit,
           current: queries.page,

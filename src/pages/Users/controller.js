@@ -93,6 +93,7 @@ const useController = () => {
     {
       title: "#",
       key: "i",
+      fixed: "left",
       dataIndex: "i",
       align: "center",
       render: (value) => value + 1,

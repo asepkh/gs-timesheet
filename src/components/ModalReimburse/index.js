@@ -7,7 +7,15 @@ import getBase64 from "@/helpers/getBase64";
 import Icon from "@/helpers/Icon";
 import { Modal, Form, Input, InputNumber, DatePicker, Upload } from "antd";
 
-const ModalReimburse = ({ visible, onCancel, title, onFinish, initialValues, ...otherProps }) => {
+const ModalReimburse = ({
+  visible,
+  onCancel,
+  title,
+  onFinish,
+  initialValues,
+  isLoading,
+  ...otherProps
+}) => {
   const [form] = Form.useForm();
   const [removeImages, setRemoveImages] = useState([]);
   const [preview, setPreview] = useState(null);
@@ -72,7 +80,12 @@ const ModalReimburse = ({ visible, onCancel, title, onFinish, initialValues, ...
       onCancel={onCancel}
       title={title}
       okText={title !== "Update Reimburse" ? "Submit" : "Save"}
+      okButtonProps={{
+        disabled: isLoading,
+      }}
       onOk={() => {
+        if (isLoading) return;
+
         form
           .validateFields()
           .then((values) => {

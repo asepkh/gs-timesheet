@@ -12,29 +12,16 @@ const Sidebar = ({ isAdmin, ...props }) => {
   const location = useLocation();
   return (
     <Sider breakpoint="lg" trigger={null} collapsible width="250" {...props}>
-      <div className="logo">
-        {!props?.collapsed ? `GUDANG SOLUSI GROUP` : `GSG`}
-      </div>
-      <Menu
-        theme="dark"
-        mode="inline"
-        defaultSelectedKeys={[location?.pathname]}
-      >
+      <div className="logo">{!props?.collapsed ? `GUDANG SOLUSI GROUP` : `GSG`}</div>
+      <Menu theme="dark" mode="inline" defaultSelectedKeys={[location?.pathname]}>
         {RoutesConfig.map((route) => {
           if (route?.noSidebar) return <></>;
           if (route?.admin && !isAdmin) return <></>;
           if (route?.submenu) {
             return (
-              <SubMenu
-                key={route?.title}
-                icon={<Icon type={route?.icon} />}
-                title={route?.title}
-              >
+              <SubMenu key={route?.title} icon={<Icon type={route?.icon} />} title={route?.title}>
                 {route?.submenu.map((submenu) => (
-                  <Menu.Item
-                    key={submenu?.path}
-                    icon={<Icon type={submenu?.icon} />}
-                  >
+                  <Menu.Item key={submenu?.path} icon={<Icon type={submenu?.icon} />}>
                     <Link to={submenu?.path}>{submenu?.title}</Link>
                   </Menu.Item>
                 ))}
