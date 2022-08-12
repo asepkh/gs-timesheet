@@ -45,7 +45,7 @@ const Profile = () => {
 
   return (
     <Row gutter={[24, 24]}>
-      <Col sm={24} md={7}>
+      <Col xs={24} md={7}>
         <Card>
           <div className="profile-picture">
             <img src={user?.profilePic} alt="profile" />
@@ -56,7 +56,7 @@ const Profile = () => {
           <h4 className="email">{user?.email}</h4>
         </Card>
       </Col>
-      <Col sm={24} md={17}>
+      <Col xs={24} md={17}>
         <Card
           title={
             <Row justify="space-between">
@@ -78,7 +78,7 @@ const Profile = () => {
             onValuesChange={(value) => console.log(value)}
           >
             <Row gutter={[20, 20]}>
-              <Col sm={24} md={12}>
+              <Col xs={24} md={12}>
                 <Form.Item
                   name="email"
                   label="E-mail"
@@ -97,13 +97,13 @@ const Profile = () => {
                   <Input placeholder="E.g. johndoe@gmail.com" />
                 </Form.Item>
               </Col>
-              <Col sm={24} md={12}>
+              <Col xs={24} md={12}>
                 <Form.Item name="phone" label="Phone Number" tooltip="Optional">
                   <Input placeholder="E.g. 081312345678" />
                 </Form.Item>
               </Col>
 
-              <Col sm={24} md={12}>
+              <Col xs={24} md={12}>
                 <Form.Item
                   label="First Name"
                   name="firstName"
@@ -113,7 +113,7 @@ const Profile = () => {
                   <Input placeholder="E.g. John" style={{ width: "100%" }} />
                 </Form.Item>
               </Col>
-              <Col sm={24} md={12}>
+              <Col xs={24} md={12}>
                 <Form.Item
                   label="Last Name"
                   name="lastName"
@@ -124,12 +124,12 @@ const Profile = () => {
                 </Form.Item>
               </Col>
 
-              <Col sm={24} md={12}>
+              <Col xs={24} md={12}>
                 <Form.Item name="profilePic" label="Profile Picture" tooltip="Optional">
                   <Input placeholder="E.g. http://www.fileurl.com/image.jpg" />
                 </Form.Item>
               </Col>
-              <Col sm={24} md={12}>
+              <Col xs={24} md={12}>
                 <Form.Item name="gender" label="Gender" required>
                   <Radio.Group>
                     <Radio value="Male">Male</Radio>

@@ -14,7 +14,14 @@ import moment from "moment";
 import "moment/locale/id";
 
 moment.locale("id");
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      staleTime: Infinity,
+    },
+  },
+});
 
 ReactDOM.render(
   <React.StrictMode>

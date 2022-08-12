@@ -13,11 +13,7 @@ const Header = ({ collapsed, toggleCollapse, ...props }) => {
   };
 
   return (
-    <AntdHeader
-      className="site-layout-background"
-      style={{ padding: 0 }}
-      {...props}
-    >
+    <AntdHeader className="site-layout-background" style={{ padding: 0 }} {...props}>
       <Row justify="space-between" className="row-header">
         {createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
           className: "trigger",
@@ -27,9 +23,7 @@ const Header = ({ collapsed, toggleCollapse, ...props }) => {
           <Dropdown
             overlay={
               <Menu>
-                <Menu.Item>
-                  <p onClick={onLogout}>Logout</p>
-                </Menu.Item>
+                <Menu.Item onClick={onLogout}>Logout</Menu.Item>
               </Menu>
             }
             trigger={["click"]}

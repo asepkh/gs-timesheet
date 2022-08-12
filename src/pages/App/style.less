@@ -89,17 +89,24 @@
 }
 
 .user-header-wrapper {
-  padding-right: 30px;
+  @media (min-width: 576px) {
+    padding-right: 12px;
+  }
 
   .user-header {
     color: #005699 !important;
     cursor: pointer;
+    font-size: 11px;
+
+    @media (min-width: 576px) {
+      font-size: 14px;
+    }
 
     text-transform: capitalize;
 
     .anticon {
       padding: 20px 10px;
-      font-size: 12px;
+      font-size: 10px;
     }
   }
 }

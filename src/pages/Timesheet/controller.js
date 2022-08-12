@@ -16,12 +16,8 @@ const useController = () => {
   const [modal, setModal] = useState({ visible: false, date: null });
   const dateFormat = date?.year + "-" + date?.month;
 
-  const { data: companyList } = useQuery("projectAll", () => getProject(), {
-      refetchOnWindowFocus: false,
-    }),
-    { data: workLocationList } = useQuery("workLocationsAll", () => getWorkLocation(), {
-      refetchOnWindowFocus: false,
-    });
+  const { data: companyList } = useQuery("projectAll", () => getProject()),
+    { data: workLocationList } = useQuery("workLocationsAll", () => getWorkLocation());
 
   const {
     data: timesheet,
@@ -30,9 +26,7 @@ const useController = () => {
     isError,
     error,
     refetch,
-  } = useQuery(["timesheet", { date: dateFormat }], () => getTimesheet({ date: dateFormat }), {
-    refetchOnWindowFocus: false,
-  });
+  } = useQuery(["timesheet", { date: dateFormat }], () => getTimesheet({ date: dateFormat }));
 
   const add = useMutation(
     (values) => {
@@ -91,7 +85,18 @@ const useController = () => {
     });
   }, [isLoading, isFetching]);
 
-  return { date, setDate, modal, setModal, dateFormat, timesheet, companyList, workLocationList, onFinish, onRemove };
+  return {
+    date,
+    setDate,
+    modal,
+    setModal,
+    dateFormat,
+    timesheet,
+    companyList,
+    workLocationList,
+    onFinish,
+    onRemove,
+  };
 };
 
 export default useController;
