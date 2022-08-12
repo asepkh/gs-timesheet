@@ -43,8 +43,8 @@ const useController = () => {
       fixed: "left",
       dataIndex: "i",
       align: "center",
-      // render: (value) => value + 1,
-      // width: "40pt",
+      render: (value) => value + 1,
+      width: "40pt",
     },
     {
       title: "Name",

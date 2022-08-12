@@ -3,16 +3,28 @@
   "name": "Gudang Solusi Group Timesheet",
   "icons": [
     {
-      "src": "/gs.png",
+      "src": "/maskable_icon_x192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/gs.png",
-      "sizes": "512x512",
+      "src": "/maskable_icon_x128.png",
+      "sizes": "128x128",
       "type": "image/png",
       "purpose": "maskable"
+    },
+    {
+      "src": "/maskable_icon_x192.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
     }
   ],
   "theme_color": "#ffffff",
