@@ -17,7 +17,7 @@ const ModalReimburse = ({
   ...otherProps
 }) => {
   const [form] = Form.useForm();
-  const [removeImages, setRemoveImages] = useState([]);
+  // const [removeImages, setRemoveImages] = useState([]);
   const [preview, setPreview] = useState(null);
 
   const normFile = (e) => {
@@ -62,8 +62,24 @@ const ModalReimburse = ({
 
   const removeImage = (file) => {
     if (!file.url) return;
+    getDownloadURL(ref(storage, file.url)).then(() => {
+      console.log("File exists");
+      deleteObject(ref(storage, file?.url));
+    });
+    // ref(storage, file.url)
+    //   .exists()
+    //   .then((exists) => {
+    //     if (exists[0]) {
+    //       console.log("File exists");
+    //       deleteObject(ref(storage, file?.url));
+    //     } else {
+    //       console.log("File does not exist");
+    //       deleteObject(ref(storage, file?.url));
+    //     }
+    //   });
 
-    setRemoveImages([...removeImages, file.url]);
+    // deleteObject(ref(storage, file?.url));
+    // setRemoveImages([...removeImages, file.url]);
   };
 
   useEffect(() => {
@@ -91,11 +107,11 @@ const ModalReimburse = ({
           .then((values) => {
             onFinish(values);
 
-            if (removeImages?.length) {
-              removeImages.forEach(async (url) => {
-                deleteObject(ref(storage, url));
-              });
-            }
+            // if (removeImages?.length) {
+            //   removeImages.forEach(async (url) => {
+            //     deleteObject(ref(storage, url));
+            //   });
+            // }
           })
           .catch((info) => {
             console.log("Validate Failed:", info);
