@@ -38,7 +38,12 @@ const ModalReimburse = ({
 
   const uploadImage = (options) => {
     const { onSuccess, onError, file, onProgress } = options;
-    const storageRef = ref(storage, `images/${file.uid}`);
+    const storageRef = ref(
+      storage,
+      `images/${file.uid}-${file?.name || Math.floor(Math.random() * 100)}-${
+        file?.lastModified || Math.floor(Math.random() * 100)
+      }`
+    );
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
@@ -50,6 +55,8 @@ const ModalReimburse = ({
       (error) => {
         // Handle error during the upload
         onError(error);
+        console.log(error);
+        alert(`ERROR: ${error?.message || "Something went wrong, pls retry"}`);
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
