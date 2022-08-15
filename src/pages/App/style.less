@@ -166,8 +166,33 @@ h4 {
   }
 }
 
-.custom-scrollbar {
+.ant-form-item-label > label .ant-form-item-tooltip {
+  @media (max-width: 576px) {
+    display: none;
+  }
 }
+
+.custom-scrollbar {
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
 &::-webkit-scrollbar {
   height: 8px;
 }
