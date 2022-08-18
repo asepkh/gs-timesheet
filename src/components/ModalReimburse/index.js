@@ -113,7 +113,7 @@ const ModalReimburse = ({
           .validateFields()
           .then((values) => {
             onFinish(values);
-
+            form.resetFields();
             // if (removeImages?.length) {
             //   removeImages.forEach(async (url) => {
             //     deleteObject(ref(storage, url));
@@ -122,6 +122,7 @@ const ModalReimburse = ({
           })
           .catch((info) => {
             console.log("Validate Failed:", info);
+            form.resetFields();
           });
       }}
       width={600}
