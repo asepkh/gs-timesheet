@@ -140,6 +140,7 @@ const useController = () => {
       ? res?.data?.map((d, i) => ({
           ...d,
           i,
+          key: i,
           action: (
             <Row key={i} justify="center">
               <Tooltip placement="topLeft" title="Edit">
@@ -176,6 +177,7 @@ const useController = () => {
       : [
           {
             i: 0,
+            key: 0,
             name: "-",
             description: "-",
             action: "-",

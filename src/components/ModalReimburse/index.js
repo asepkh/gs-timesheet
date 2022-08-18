@@ -90,17 +90,31 @@ const ModalReimburse = ({
   };
 
   useEffect(() => {
+    if (!visible) return;
     if (initialValues)
       form.setFieldsValue({
         ...initialValues,
+        images:
+          initialValues?.images?.map((d, i) => ({
+            ...d,
+            uid: d?.id?.toString() || i?.toString(),
+            status: "done",
+            name: `image-${d?.id || i}`,
+            thumbUrl: d?.url,
+            percent: 100,
+            type: "image",
+          })) || [],
         date: initialValues.date ? moment(initialValues.date) : undefined,
       });
-  }, [initialValues, form]);
+  }, [initialValues, form, visible]);
 
   return (
     <Modal
       visible={visible}
-      onCancel={onCancel}
+      onCancel={() => {
+        form.resetFields();
+        onCancel();
+      }}
       title={title}
       okText={title !== "Update Reimburse" ? "Submit" : "Save"}
       okButtonProps={{
