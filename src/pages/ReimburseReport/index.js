@@ -81,12 +81,13 @@ const Summary = () => {
               dataSource={record?.reimbursements.map((d, i) => ({ i, ...d }))}
               bordered
               pagination={false}
+              scroll={{ x: true }}
             />
           ),
           rowExpandable: (record) => record?.reimbursements?.length > 0,
         }}
         dataSource={data}
-        scroll={{ x: 1200 }}
+        scroll={{ x: true }}
         loading={isLoading || isFetching}
         pagination={{
           total: totalPages * queries?.limit,

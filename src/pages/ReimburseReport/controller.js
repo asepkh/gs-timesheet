@@ -68,6 +68,7 @@ const useController = () => {
       align: "center",
       width: "100pt",
       render: (value) => moment(value).format("DD-MM-YYYY"),
+      fixed: "left",
     },
     {
       title: "Keterangan",

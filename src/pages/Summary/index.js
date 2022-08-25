@@ -144,7 +144,7 @@ const Summary = () => {
             record?.timesheets?.descriptions?.length > 0,
         }}
         dataSource={data}
-        scroll={{ x: 1200 }}
+        scroll={{ x: true }}
         loading={isLoading || isFetching}
         pagination={{
           total: totalPages * queries?.limit,

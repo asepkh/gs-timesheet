@@ -38,7 +38,7 @@ const Reimburse = () => {
       <Table
         columns={column}
         dataSource={data}
-        scroll={{ x: 1200 }}
+        scroll={{ x: true }}
         loading={isLoading}
         // total={2}
         pagination={{
