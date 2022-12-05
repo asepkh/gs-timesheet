@@ -1,7 +1,6 @@
-// import { useEffect } from "react";
 import moment from "moment";
 import "./styles.less";
-import { /*Badge,*/ Tag } from "antd";
+import { Tag } from "antd";
 import { Fragment } from "react";
 
 const Calendar = ({ date, data, onClickDay }) => {
@@ -55,10 +54,6 @@ const Calendar = ({ date, data, onClickDay }) => {
       return tableColumnData;
     })
   );
-
-  // useEffect(() => {
-  //   console.log({ tableData, firstDay, tableRows });
-  // }, []);
 
   return (
     <div className="calendar-wrapper">

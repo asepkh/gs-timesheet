@@ -99,11 +99,6 @@ const useController = () => {
         },
       ],
     },
-    // {
-    //   title: "Keterangan Tertulis",
-    //   key: "keterangan",
-    //   dataIndex: "keterangan",
-    // },
   ];
 
   const data =
@@ -114,16 +109,6 @@ const useController = () => {
           i,
           ...d.timesheets,
           name: d?.firstName + " " + d?.lastName,
-          // keterangan: d?.timesheets?.descriptions?.map((item, index) =>
-          //   item?.description ? (
-          //     <div className="keterangan" key={index}>
-          //       - <b>{moment(item?.date).format("DD MMMM YYYY")}: </b>{" "}
-          //       {item?.description}
-          //     </div>
-          //   ) : (
-          //     <Fragment key={index} />
-          //   )
-          // ),
         }))
       : [
           {

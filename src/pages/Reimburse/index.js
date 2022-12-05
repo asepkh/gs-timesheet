@@ -40,7 +40,6 @@ const Reimburse = () => {
         dataSource={data}
         scroll={{ x: true }}
         loading={isLoading}
-        // total={2}
         pagination={{
           total: totalPages * queries.limit,
           onChange: (currentPage) => setQueries({ page: currentPage }),
